@@ -1,5 +1,5 @@
 const assert       = require('assert');
-const boardFactory = require('../../../../../src/logic/nine-mens-morris/game/objects/board/Board');
+const boardFactory = require('../../../../../src/logic/nine-mens-morris/game/objects/Board');
 
 
 describe('Board', function () {

@@ -1,27 +1,47 @@
-const enumPositionTokens = require('./enumPositionTokens');
-const enumPositionErrors = require('./enumPositionErrors');
-const utilities = require('./utilities');
+const enumPositionTokens = require('./enum/enumPositionTokens');
+const enumPositionErrors = require('./errors/enumPositionErrors');
+const fieldIdFactory     = require('./FieldId');
 
 
 class Position {
 
     constructor(id, neighbors = {top: null, right: null, bottom: null, left: null}) {
-        utilities.throwIfOutOfRange(id);
-        this._id = id;
+        this.id         = id;
         this._neighbors = neighbors;
         this._token     = enumPositionTokens.TOKEN_EMPTY;
     }
 
+    set id(id) {
+        this._id = fieldIdFactory.createFieldId(id);
+    }
+
     get id() {
-        return this._id;
+        return this._id.id;
     }
 
     get token() {
         return this._token;
     }
 
+    isEmpty() {
+        return this._token === enumPositionTokens.TOKEN_EMPTY;
+    }
+
+    hasEnemyToken(ownToken) {
+        return this._token !== enumPositionTokens.TOKEN_EMPTY && this._token !== ownToken;
+    }
+
     setTokenEmpty() {
         this._token = enumPositionTokens.TOKEN_EMPTY;
+    }
+
+    setToken(token) {
+        if (token !== enumPositionTokens.TOKEN_PLAYER_ONE
+            && token !== enumPositionTokens.TOKEN_PLAYER_TWO
+            && token !== enumPositionTokens.TOKEN_EMPTY) {
+            throw new Error(enumPositionErrors.INVALID_TOKEN);
+        }
+        this._token = token;
     }
 
     setTokenPlayerOne() {
@@ -33,7 +53,7 @@ class Position {
     }
 
     getTopNeighbor() {
-        if(typeof this._neighbors.top !== 'object') {
+        if (typeof this._neighbors.top !== 'object') {
             throw new Error(enumPositionErrors.POSITION_NOT_SET);
         }
         return this._neighbors.top;
@@ -44,7 +64,7 @@ class Position {
     }
 
     getRightNeighbor() {
-        if(typeof this._neighbors.right !== 'object') {
+        if (typeof this._neighbors.right !== 'object') {
             throw new Error(enumPositionErrors.POSITION_NOT_SET);
         }
         return this._neighbors.right;
@@ -55,7 +75,7 @@ class Position {
     }
 
     getBottomNeighbor() {
-        if(typeof this._neighbors.bottom !== 'object') {
+        if (typeof this._neighbors.bottom !== 'object') {
             throw new Error(enumPositionErrors.POSITION_NOT_SET);
         }
         return this._neighbors.bottom;
@@ -66,7 +86,7 @@ class Position {
     }
 
     getLeftNeighbor() {
-        if(typeof this._neighbors.left !== 'object') {
+        if (typeof this._neighbors.left !== 'object') {
             throw new Error(enumPositionErrors.POSITION_NOT_SET);
         }
         return this._neighbors.left;
@@ -76,6 +96,8 @@ class Position {
         this._neighbors.left = neighbor;
     }
 
+
 }
 
-exports.createPosition = (id, neighbors=undefined) => new Position(id, neighbors);
+
+exports.createPosition = (id, neighbors = undefined) => new Position(id, neighbors);

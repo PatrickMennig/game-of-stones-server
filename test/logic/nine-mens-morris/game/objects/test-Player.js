@@ -1,7 +1,7 @@
 const assert           = require('assert');
-const playerFactory    = require('../../../../../src/logic/nine-mens-morris/game/objects/player/Player');
-const enumPlayerTypes  = require('../../../../../src/logic/nine-mens-morris/game/objects/player/enumPlayerTypes');
-const enumPlayerErrors = require('../../../../../src/logic/nine-mens-morris/game/objects/player/enumPlayerErrors');
+const playerFactory    = require('../../../../../src/logic/nine-mens-morris/game/objects/Player');
+const enumPlayerTypes  = require('../../../../../src/logic/nine-mens-morris/game/objects/enum/enumPlayerTypes');
+const enumPlayerErrors = require('../../../../../src/logic/nine-mens-morris/game/objects/errors/enumPlayerErrors');
 
 
 describe('Player', function () {

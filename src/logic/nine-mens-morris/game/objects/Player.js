@@ -1,12 +1,15 @@
-const enumPlayerTypes  = require('./enumPlayerTypes');
-const enumPlayerErrors = require('./enumPlayerErrors');
+const enumPlayerTypes  = require('./enum/enumPlayerTypes');
+const enumPlayerErrors = require('./errors/enumPlayerErrors');
 
 
 class Player {
 
-    constructor(playerId, type) {
+    constructor(playerId, type, token) {
+
         this.playerId          = playerId;
         this.type              = type;
+        this._token            = token;
+
         this._numTokensInHand  = 9;
         this._numTokensTotal   = 9;
         this._numTokensOnBoard = 0;
@@ -21,6 +24,10 @@ class Player {
 
     get type() {
         return this._type;
+    }
+
+    get token() {
+        return this._token;
     }
 
     set playerId(playerId) {

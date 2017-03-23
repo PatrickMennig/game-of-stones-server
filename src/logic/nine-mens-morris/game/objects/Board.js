@@ -1,5 +1,7 @@
 const positionFactory = require('./Position');
-const utilities       = require('./utilities');
+const fieldIdFactory = require('./FieldId');
+const enumBoardErrors = require('./errors/enumBoardErrors');
+
 
 
 class Board {
@@ -9,8 +11,38 @@ class Board {
     }
 
     getPosition(id) {
-        utilities.throwIfOutOfRange(id);
-        return this._board.get(id);
+        return this._board.get(fieldIdFactory.createFieldId(id).id);
+    }
+
+    resolveMove(move) {
+
+        if (this.getPosition(move.toId).isEmpty() !== true) {
+            throw new Error(enumBoardErrors.INVALID_MOVE_TARGET_OCCUPIED);
+        }
+
+        if (move.fromId && this.getPosition(move.fromId).isEmpty()) {
+            throw new Error(enumBoardErrors.INVALID_MOVE_FROM_EMPTY);
+        }
+
+        if (move.fromId && this.getPosition(move.fromId).hasEnemyToken(move.token)) {
+            throw new Error(enumBoardErrors.INVALID_MOVE_FROM_ENEMY);
+        }
+
+        if (move.removeId && this.getPosition(move.removeId).isEmpty()) {
+            throw new Error(enumBoardErrors.INVALID_MOVE_REMOVE_EMPTY);
+        }
+
+        if (move.removeId && this.getPosition(move.removeId).hasEnemyToken(move.token) !== true) {
+            throw new Error(enumBoardErrors.INVALID_MOVE_REMOVE_YOURS);
+        }
+
+        this.getPosition(move.toId).setToken(move.token);
+        if(move.fromId) {
+            this.getPosition(move.fromId).setTokenEmpty();
+        }
+        if(move.removeId) {
+            this.getPosition(move.removeId).setTokenEmpty();
+        }
     }
 }
 
@@ -61,7 +93,7 @@ const setupBoard = () => {
 
 
 const emptyBoard = () => new Map(new Array(24).fill(null).map((v, i) => [i, positionFactory.createPosition(i)]));
-const setNeighboredHorizontal = (idA, idB) => {};
+
 const setNeighboredVertical = (board, idA, idB) => {
     board.get(idA).setBottomNeighbor(board.get(idB));
     board.get(idB).setTopNeighbor(board.get(idA));
