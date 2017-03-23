@@ -1,0 +1,17 @@
+{
+  "name": "game-of-stones-server",
+  "version": "0.0.1",
+  "description": "A new version of the nine mens morris server for the course programming teaching coding with develeoping a nine mens morris client.",
+  "main": "src/server/main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "author": "Patrick Mennig",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  }
+}
