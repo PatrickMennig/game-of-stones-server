@@ -4,7 +4,7 @@ const enumPlayerErrors = require('./errors/enumPlayerErrors');
 
 class Player {
 
-    constructor(playerId, type, token) {
+    constructor(playerId, token, type) {
 
         this.playerId          = playerId;
         this.type              = type;
@@ -72,6 +72,6 @@ class Player {
 }
 
 
-exports.createPlayer      = (playerId, type) => new Player(playerId, type);
-exports.createHumanPlayer = playerId => new Player(playerId, enumPlayerTypes.HUMAN);
-exports.createBotPlayer   = playerId => new Player(playerId, enumPlayerTypes.BOT);
+exports.createPlayer      = (playerId, token, type) => new Player(playerId, token, type);
+exports.createHumanPlayer = (playerId, token) => new Player(playerId, token, enumPlayerTypes.HUMAN);
+exports.createBotPlayer   = (playerId, token) => new Player(playerId, token, enumPlayerTypes.BOT);
