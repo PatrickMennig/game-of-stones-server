@@ -1,6 +1,6 @@
 const assert            = require('assert');
-const fieldIdFactory    = require('../../../../../src/logic/nine-mens-morris/game/objects/FieldId');
-const enumFieldIdErrors = require('../../../../../src/logic/nine-mens-morris/game/objects/errors/enumFieldIdErrors');
+const fieldIdFactory    = require('../../../../src/logic/nine-mens-morris/game/FieldId');
+const enumFieldIdErrors = require('../../../../src/logic/nine-mens-morris/game/errors/enumFieldIdErrors');
 
 
 describe('FieldId', function () {

@@ -1,5 +1,5 @@
 const idGenerator    = require('./idGenerator');
-const playerFactory  = require('./objects/Player');
+const playerFactory  = require('./Player');
 const enumGameErrors = require('./errors/enumGameErrors');
 const enumGameStates = require('./enum/enumGameStates');
 

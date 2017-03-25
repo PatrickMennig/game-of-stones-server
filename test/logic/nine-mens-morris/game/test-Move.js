@@ -1,7 +1,7 @@
 const assert             = require('assert');
-const moveFactory        = require('../../../../../src/logic/nine-mens-morris/game/objects/Move');
-const enumPositionTokens = require('../../../../../src/logic/nine-mens-morris/game/objects/enum/enumPositionTokens');
-const enumFieldIdErrors  = require('../../../../../src/logic/nine-mens-morris/game/objects/errors/enumFieldIdErrors');
+const moveFactory        = require('../../../../src/logic/nine-mens-morris/game/Move');
+const enumPositionTokens = require('../../../../src/logic/nine-mens-morris/game/enum/enumPositionTokens');
+const enumFieldIdErrors  = require('../../../../src/logic/nine-mens-morris/game/errors/enumFieldIdErrors');
 
 
 describe('Move', function () {

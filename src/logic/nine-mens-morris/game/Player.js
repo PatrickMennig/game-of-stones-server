@@ -1,14 +1,16 @@
-const enumPlayerTypes  = require('./enum/enumPlayerTypes');
-const enumPlayerErrors = require('./errors/enumPlayerErrors');
+const enumPlayerTypes    = require('./enum/enumPlayerTypes');
+const enumPlayerErrors   = require('./errors/enumPlayerErrors');
+const enumPositionTokens = require('./enum/enumPositionTokens');
+const PLAYER_BOT_ID      = 'botplayer';
 
 
 class Player {
 
     constructor(playerId, token, type) {
 
-        this.playerId          = playerId;
-        this.type              = type;
-        this._token            = token;
+        this.playerId = playerId;
+        this.type     = type;
+        this._token   = token;
 
         this._numTokensInHand  = 9;
         this._numTokensTotal   = 9;
@@ -72,6 +74,9 @@ class Player {
 }
 
 
-exports.createPlayer      = (playerId, token, type) => new Player(playerId, token, type);
-exports.createHumanPlayer = (playerId, token) => new Player(playerId, token, enumPlayerTypes.HUMAN);
-exports.createBotPlayer   = (playerId, token) => new Player(playerId, token, enumPlayerTypes.BOT);
+exports.createPlayer         = (playerId, token, type) => new Player(playerId, token, type);
+exports.createHumanPlayer    = (playerId, token) => new Player(playerId, token, enumPlayerTypes.HUMAN);
+exports.createHumanPlayerOne = (playerId) => new Player(playerId, enumPositionTokens.TOKEN_PLAYER_ONE, enumPlayerTypes.HUMAN);
+exports.createHumanPlayerOne = (playerId) => new Player(playerId, enumPositionTokens.TOKEN_PLAYER_TWO, enumPlayerTypes.HUMAN);
+exports.createBotPlayer      = (token) => new Player(PLAYER_BOT_ID, token, enumPlayerTypes.BOT);
+exports.createBotPlayerTwo   = () => new Player(PLAYER_BOT_ID, enumPositionTokens.TOKEN_PLAYER_TWO, enumPlayerTypes.BOT);
