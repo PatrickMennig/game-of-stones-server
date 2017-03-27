@@ -94,4 +94,4 @@ class Player {
 
 exports.createPlayer      = (playerId, type) => new Player(playerId, type);
 exports.createHumanPlayer = (playerId) => new Player(playerId, enumPlayerTypes.HUMAN);
-exports.createBotPlayer   = () => new Player(`bot_${idGenerator.nextId(6)}`, enumPlayerTypes.BOT);
+exports.createBotPlayer   = () => new Player(`bot_${idGenerator.nextId(8)}`, enumPlayerTypes.BOT);
