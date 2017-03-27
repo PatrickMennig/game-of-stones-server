@@ -34,6 +34,29 @@ describe('Move', function () {
         it('should not create a move with invalid removeId', function () {
             assert.throws(() => moveFactory.createMove(enumPositionTokens.TOKEN_PLAYER_ONE, 3, -44), TypeError, enumFieldIdErrors.INVALID_ID);
         });
+    });
+
+    describe('is placing move', function () {
+
+        it('should return true for a placing move (phase 1)', function () {
+            const move = moveFactory.createMove('token', 0);
+            assert.equal(move.isPlacingMove(), true);
+        });
+
+        it('should return false for a non placing move (phase 1)', function () {
+            const move = moveFactory.createMove('token', 0, 1);
+            assert.equal(move.isPlacingMove(), false);
+        });
+
+        it('should return true for a removing move', function () {
+            const move = moveFactory.createMove('token', 0, null, 1);
+            assert.equal(move.isRemovingMove(), true);
+        });
+
+        it('should return false for a non placing move', function () {
+            const move = moveFactory.createMove('token', 0, 1);
+            assert.equal(move.isRemovingMove(), false);
+        });
 
     });
 

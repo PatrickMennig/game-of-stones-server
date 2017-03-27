@@ -1,7 +1,5 @@
 const positionFactory = require('./Position');
-const fieldIdFactory = require('./FieldId');
 const enumBoardErrors = require('./errors/enumBoardErrors');
-
 
 
 class Board {
@@ -11,12 +9,26 @@ class Board {
     }
 
     getPosition(id) {
-        return this._board.get(fieldIdFactory.createFieldId(id).id);
+        return this._board.get(positionFactory.fieldId(id));
     }
 
+    getState() {
+        return this._board.map(p => p.token);
+    }
+
+    /**
+     * The board is responsible for holding the positions of tokens.
+     * It has no clue about the rules, nor does it need to have it.
+     *
+     * All it knows are the physical limitations of the board, i.e.
+     * each position only can hold one token and moving from an
+     * empty position is impossible.
+     *
+     * @param move
+     */
     resolveMove(move) {
 
-        if (this.getPosition(move.toId).isEmpty() !== true) {
+        if (true !== this.getPosition(move.toId).isEmpty()) {
             throw new Error(enumBoardErrors.INVALID_MOVE_TARGET_OCCUPIED);
         }
 
@@ -32,15 +44,15 @@ class Board {
             throw new Error(enumBoardErrors.INVALID_MOVE_REMOVE_EMPTY);
         }
 
-        if (move.removeId && this.getPosition(move.removeId).hasEnemyToken(move.token) !== true) {
+        if (true !== move.removeId && this.getPosition(move.removeId).hasEnemyToken(move.token)) {
             throw new Error(enumBoardErrors.INVALID_MOVE_REMOVE_YOURS);
         }
 
         this.getPosition(move.toId).setToken(move.token);
-        if(move.fromId) {
+        if (move.fromId) {
             this.getPosition(move.fromId).setTokenEmpty();
         }
-        if(move.removeId) {
+        if (move.removeId) {
             this.getPosition(move.removeId).setTokenEmpty();
         }
     }
@@ -90,7 +102,6 @@ const setupBoard = () => {
 
     return board;
 };
-
 
 const emptyBoard = () => new Map(new Array(24).fill(null).map((v, i) => [i, positionFactory.createPosition(i)]));
 

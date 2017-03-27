@@ -241,4 +241,20 @@ describe('Board', function () {
 
     });
 
+    describe('resolve move', function () {
+
+        it('should correctly resolve a move');
+
+        it('should throw an error for an invalid move, missing toId');
+
+        it('should throw an error for an invalid move, fromId field is emtpy');
+
+        it('should throw an error for an invalid move, fromId field has enemy token');
+
+        it('should throw an error for an invalid move, removeId field is empty');
+
+        it('should throw an error for an invalid move, removeId field has own token');
+
+    });
+
 });

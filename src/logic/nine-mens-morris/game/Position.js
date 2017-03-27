@@ -1,6 +1,6 @@
+const fieldIdFactory     = require('./FieldId');
 const enumPositionTokens = require('./enum/enumPositionTokens');
 const enumPositionErrors = require('./errors/enumPositionErrors');
-const fieldIdFactory     = require('./FieldId');
 
 
 class Position {
@@ -36,20 +36,7 @@ class Position {
     }
 
     setToken(token) {
-        if (token !== enumPositionTokens.TOKEN_PLAYER_ONE
-            && token !== enumPositionTokens.TOKEN_PLAYER_TWO
-            && token !== enumPositionTokens.TOKEN_EMPTY) {
-            throw new Error(enumPositionErrors.INVALID_TOKEN);
-        }
         this._token = token;
-    }
-
-    setTokenPlayerOne() {
-        this._token = enumPositionTokens.TOKEN_PLAYER_ONE;
-    }
-
-    setTokenPlayerTow() {
-        this._token = enumPositionTokens.TOKEN_PLAYER_TWO;
     }
 
     getTopNeighbor() {
@@ -95,9 +82,8 @@ class Position {
     setLeftNeighbor(neighbor) {
         this._neighbors.left = neighbor;
     }
-
-
 }
 
 
 exports.createPosition = (id, neighbors = undefined) => new Position(id, neighbors);
+exports.fieldId        = (id) => fieldIdFactory.createFieldId(id).id;

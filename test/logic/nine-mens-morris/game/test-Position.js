@@ -39,23 +39,17 @@ describe('Position', function () {
 
         it('should correctly set empty token', function () {
             const position = positionFactory.createPosition(0);
-            position.setTokenPlayerOne();
+            position.setToken('random-token');
             position.setTokenEmpty();
             assert.equal(position.token, enumPositionTokens.TOKEN_EMPTY);
         });
 
-        it('should correctly set player one token', function () {
+        it('should correctly set player token', function () {
             const position = positionFactory.createPosition(0);
-            position.setTokenPlayerOne();
-            assert.equal(position.token, enumPositionTokens.TOKEN_PLAYER_ONE);
+            const P_ID = 'playeroneid';
+            position.setToken(P_ID);
+            assert.equal(position.token, P_ID);
         });
-
-        it('should correctly set player two token', function () {
-            const position = positionFactory.createPosition(0);
-            position.setTokenPlayerTow();
-            assert.equal(position.token, enumPositionTokens.TOKEN_PLAYER_TWO);
-        });
-
     });
 
     describe('neighbors', function () {

@@ -26,6 +26,14 @@ class Move {
         return this._removeId !== null ? this._removeId.id : false;
     }
 
+    isPlacingMove() {
+        return this.fromId === false;
+    }
+
+    isRemovingMove() {
+        return this.removeId !== false;
+    }
+
 }
 
 
