@@ -5,5 +5,3 @@ module.exports = {
     INVALID_MOVE_REMOVE_EMPTY: 'Invalid move, remove position empty.',
     INVALID_MOVE_REMOVE_YOURS: 'Invalid move, remove position is your own token.'
 };
-
-

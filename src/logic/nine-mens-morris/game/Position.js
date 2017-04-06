@@ -6,20 +6,20 @@ const enumPositionErrors = require('./errors/enumPositionErrors');
 class Position {
 
     constructor(id, neighbors = {top: null, right: null, bottom: null, left: null}) {
-        this.id         = id;
+        this._setId(id);
         this._neighbors = neighbors;
         this._token     = enumPositionTokens.TOKEN_EMPTY;
     }
 
-    set id(id) {
+    _setId(id) {
         this._id = fieldIdFactory.createFieldId(id);
     }
 
-    get id() {
-        return this._id.id;
+    getId() {
+        return this._id.getId();
     }
 
-    get token() {
+    getToken() {
         return this._token;
     }
 
@@ -27,7 +27,11 @@ class Position {
         return this._token === enumPositionTokens.TOKEN_EMPTY;
     }
 
-    hasEnemyToken(ownToken) {
+    isOwnToken(ownToken) {
+        return this._token === ownToken;
+    }
+
+    isEnemyToken(ownToken) {
         return this._token !== enumPositionTokens.TOKEN_EMPTY && this._token !== ownToken;
     }
 
@@ -82,8 +86,20 @@ class Position {
     setLeftNeighbor(neighbor) {
         this._neighbors.left = neighbor;
     }
+
+    isNeighborOf(otherPosition) {
+        const neighbors  = Object.keys(this._neighbors).map(k => this._neighbors[k]);
+        let isNeighbored = false;
+        neighbors.forEach(neighbor => {
+            if (neighbor.id === otherPosition.id) {
+                isNeighbored = true;
+            }
+        });
+
+        return isNeighbored;
+    }
 }
 
 
 exports.createPosition = (id, neighbors = undefined) => new Position(id, neighbors);
-exports.fieldId        = (id) => fieldIdFactory.createFieldId(id).id;
+exports.id             = (id) => fieldIdFactory.createFieldId(id).getId();

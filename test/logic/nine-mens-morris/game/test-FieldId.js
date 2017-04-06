@@ -9,7 +9,7 @@ describe('FieldId', function () {
 
         it('should create a field id', function () {
             const fieldId = fieldIdFactory.createFieldId(0);
-            assert.equal(fieldId.id, 0);
+            assert.equal(fieldId.getId(), 0);
         });
 
         it('should not create a field id, too low', function () {

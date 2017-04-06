@@ -8,6 +8,7 @@ class GameStatusMessage {
 
     message() {
         return {
+            gameId: this._meta.gameId,
             timeStarted: this._meta.timeStarted,
             timeEnded: this._meta.timeEnded,
             timeLastTurnPlayed: this._meta.timeLastTurnPlayed,

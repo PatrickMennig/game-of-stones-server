@@ -1,5 +1,4 @@
 const positionFactory = require('./Position');
-const enumBoardErrors = require('./errors/enumBoardErrors');
 
 
 class Board {
@@ -9,57 +8,38 @@ class Board {
     }
 
     getPosition(id) {
-        return this._board.get(positionFactory.fieldId(id));
+        return this._board.get(positionFactory.id(id));
     }
 
     getState() {
-        return this._board.map(p => p.token);
+        return this._board.entries().map(p => p.getToken());
     }
 
-    /**
-     * The board is responsible for holding the positions of tokens.
-     * It has no clue about the rules, nor does it need to have it.
-     *
-     * All it knows are the physical limitations of the board, i.e.
-     * each position only can hold one token and moving from an
-     * empty position is impossible.
-     *
-     * @param move
-     */
-    resolveMove(move) {
+    resolve(token, toId, fromId = null, removeId = null) {
 
-        if (true !== this.getPosition(move.toId).isEmpty()) {
-            throw new Error(enumBoardErrors.INVALID_MOVE_TARGET_OCCUPIED);
+        this.getPosition(toId).setToken(token);
+
+        if (fromId) {
+            this.getPosition(fromId).setTokenEmpty();
         }
 
-        if (move.fromId && this.getPosition(move.fromId).isEmpty()) {
-            throw new Error(enumBoardErrors.INVALID_MOVE_FROM_EMPTY);
+        if (removeId) {
+            this.getPosition(removeId).setTokenEmpty();
         }
+    }
 
-        if (move.fromId && this.getPosition(move.fromId).hasEnemyToken(move.token)) {
-            throw new Error(enumBoardErrors.INVALID_MOVE_FROM_ENEMY);
-        }
-
-        if (move.removeId && this.getPosition(move.removeId).isEmpty()) {
-            throw new Error(enumBoardErrors.INVALID_MOVE_REMOVE_EMPTY);
-        }
-
-        if (true !== move.removeId && this.getPosition(move.removeId).hasEnemyToken(move.token)) {
-            throw new Error(enumBoardErrors.INVALID_MOVE_REMOVE_YOURS);
-        }
-
-        this.getPosition(move.toId).setToken(move.token);
-        if (move.fromId) {
-            this.getPosition(move.fromId).setTokenEmpty();
-        }
-        if (move.removeId) {
-            this.getPosition(move.removeId).setTokenEmpty();
-        }
+    isAdjacent(posOne, posTwo) {
+        return posOne.isNeighborOf(posTwo);
     }
 }
 
 
 exports.createBoard = () => new Board();
+exports.createBoardWithPattern = (pattern) => {
+    const board = new Board();
+    pattern.forEach(p => board.resolve(p.token, p.toId, p.fromId, p.removeId));
+    return board;
+};
 
 
 const setupBoard = () => {

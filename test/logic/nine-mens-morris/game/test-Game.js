@@ -58,4 +58,28 @@ describe('Game', function () {
 
     });
 
+    describe('getGameId', function () {
+
+        it('should return the correct game id');
+
+    });
+
+    describe('getActivePlayer', function () {
+
+        it('should return the currently active player');
+
+    });
+
+    describe('getInactivePlayer', function () {
+
+        it('should return the currently inactive player');
+
+    });
+
+    describe('getStatusMessage', function () {
+
+        it('should return a correct status message');
+
+    });
+
 });

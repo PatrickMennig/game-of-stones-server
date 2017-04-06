@@ -19,6 +19,7 @@ class Game {
         this._board = boardFactory.createBoard();
 
         this._meta = {
+            gameId: this._id,
             timeStarted: new Date().getTime(),
             timeEnded: null,
             timeLastTurnPlayed: null,
@@ -32,19 +33,15 @@ class Game {
         this._moves = [];
     }
 
-    get meta() {
-        return this._meta;
+    getGameId() {
+        return this._id;
     }
 
-    get board() {
-        return this._board;
-    }
-
-    get activePlayer() {
+    getActivePlayer() {
         return this._meta.activePlayer;
     }
 
-    get inactivePlayer() {
+    getInactivePlayer() {
         return this._meta.inactivePlayer;
     }
 
@@ -77,17 +74,23 @@ class Game {
         return status(this._meta);
     }
 
+    getStatusMessage() {
+        return status(this._meta);
+    }
+
     move(move, player) {
 
-        if (true !== this._meta.activePlayer.equals(player) ) {
+        if (true !== this.getActivePlayer().equals(player) ) {
             throw new Error(enumGameErrors.NOT_ACTIVE_PLAYER);
         }
 
-        if (true !== Rules.isValidMove(move)) {
+        const msg = Rules.isValid(move, this._board, this.getActivePlayer(), this.getInactivePlayer());
+
+        if (true !== msg.isValid) {
             throw new Error(enumGameErrors.INVALID_MOVE);
         }
 
-        this._board.resolveMove(move);
+        this._board.resolve(move);
 
         if(move.isPlacingMove()) {
             this._meta.activePlayer.placedToken();
@@ -97,7 +100,9 @@ class Game {
             this._meta.inactivePlayer.lostToken();
         }
 
-        // TODO check for game end
+        if(msg.endsGame) {
+            this._endGame();
+        }
 
         this._updateMeta(move);
 
@@ -110,14 +115,20 @@ class Game {
         this._meta.inactivePlayer = starting.second;
     }
 
-    _updateMeta(move) {
+    _updateMeta(move, endsGame = false) {
         this._moves.push(move);
         this._meta.turnsTaken += 1;
         this._meta.timeLastTurnPlayed = new Date().getTime();
-        const p = this.activePlayer;
-        this._meta.activePlayer = this._meta.inactivePlayer;
-        this._meta.inactivePlayer = p;
+        if(!endsGame) {
+            const p = this.getActivePlayer();
+            this._meta.activePlayer = this._meta.inactivePlayer;
+            this._meta.inactivePlayer = p;
+        }
         this._meta.boardState = this._board.getState()
+    }
+
+    _endGame() {
+        throw new Error('Not yet implemented');
     }
 }
 
@@ -125,8 +136,8 @@ class Game {
 exports.createGame            = () => new Game();
 exports.createAndStartBotGame = (playerId) => {
     const g = new Game();
-    const p = playerFactory.createHumanPlayerOne(playerId);
-    const b = playerFactory.createBotPlayerTwo();
+    const p = playerFactory.createHumanPlayer(playerId);
+    const b = playerFactory.createBotPlayer();
     g.addPlayer(p);
     g.addPlayer(b);
     return g.startGame();

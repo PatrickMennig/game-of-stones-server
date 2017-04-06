@@ -13,12 +13,12 @@ describe('Player', function () {
 
         it('should create a player, id has to be correct', function () {
             const player = playerFactory.createPlayer(ID, enumPlayerTypes.BOT);
-            assert.equal(player.playerId, ID);
+            assert.equal(player.getPlayerId(), ID);
         });
 
         it('should create a player, player type has to be correct (BOT)', function () {
             const player = playerFactory.createPlayer(ID, enumPlayerTypes.BOT);
-            assert.equal(player.type, enumPlayerTypes.BOT);
+            assert.equal(player.getType(), enumPlayerTypes.BOT);
         });
 
         it('should not create a player with a number as id', function () {
@@ -36,33 +36,33 @@ describe('Player', function () {
         it('in hand should decrease when placing', function () {
             const player = playerFactory.createPlayer(ID, enumPlayerTypes.BOT);
             player.placedToken();
-            assert.equal(player.numTokensInHand, 8);
+            assert.equal(player.getNumTokensInHand(), 8);
         });
 
         it('on board should increase when placing', function () {
             const player = playerFactory.createPlayer(ID, enumPlayerTypes.BOT);
             player.placedToken();
-            assert.equal(player.numTokensOnBoard, 1);
+            assert.equal(player.getNumTokensOnBoard(), 1);
         });
 
         it('on board should decrease when losing a token', function () {
             const player = playerFactory.createPlayer(ID, enumPlayerTypes.BOT);
             player.placedToken();
             player.lostToken();
-            assert.equal(player.numTokensOnBoard, 0);
+            assert.equal(player.getNumTokensOnBoard(), 0);
         });
 
         it('in total should decrease when losing a token', function () {
             const player = playerFactory.createPlayer(ID, enumPlayerTypes.BOT);
             player.placedToken();
             player.lostToken();
-            assert.equal(player.numTokensTotal, 8);
+            assert.equal(player.getNumTokensTotal(), 8);
         });
 
         it('in total should not decrease when placing a token', function () {
             const player = playerFactory.createPlayer(ID, enumPlayerTypes.BOT);
             player.placedToken();
-            assert.equal(player.numTokensTotal, 9);
+            assert.equal(player.getNumTokensTotal(), 9);
         });
 
     });
@@ -92,12 +92,12 @@ describe('Player', function () {
 
         it('should create a player using factory, player type has to be correct (BOT)', function () {
             const player = playerFactory.createBotPlayer(ID);
-            assert.equal(player.type, enumPlayerTypes.BOT);
+            assert.equal(player.getType(), enumPlayerTypes.BOT);
         });
 
         it('should create a player using factory, player type has to be correct (HUMAN)', function () {
             const player = playerFactory.createHumanPlayer(ID);
-            assert.equal(player.type, enumPlayerTypes.HUMAN);
+            assert.equal(player.getType(), enumPlayerTypes.HUMAN);
         });
 
     });

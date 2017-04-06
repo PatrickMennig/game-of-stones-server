@@ -1,6 +1,5 @@
 const enumPlayerTypes    = require('./enum/enumPlayerTypes');
 const enumPlayerErrors   = require('./errors/enumPlayerErrors');
-const enumPositionTokens = require('./enum/enumPositionTokens');
 const idGenerator        = require('./idGenerator');
 
 
@@ -8,8 +7,8 @@ class Player {
 
     constructor(playerId, type) {
 
-        this.playerId = playerId;
-        this.type     = type;
+        this._setPlayerId(playerId);
+        this._setType(type);
 
         this._numTokensInHand  = 9;
         this._numTokensTotal   = 9;
@@ -18,46 +17,46 @@ class Player {
         this._nextMove = null;
     }
 
-    set type(type) {
+    _setType(type) {
         if (type !== enumPlayerTypes.BOT && type !== enumPlayerTypes.HUMAN) {
             throw new TypeError(enumPlayerErrors.PLAYER_TYPE_INVALID);
         }
         this._type = type;
     }
 
-    get type() {
+    getType() {
         return this._type;
     }
 
-    get token() {
+    getToken() {
         return this.playerId;
     }
 
-    set playerId(playerId) {
+    _setPlayerId(playerId) {
         if (typeof playerId !== 'string') {
             throw new TypeError(enumPlayerErrors.PLAYER_ID_NOT_A_STRING);
         }
         this._playerId = playerId;
     }
 
-    get playerId() {
+    getPlayerId() {
         return this._playerId;
     }
 
-    get numTokensInHand() {
+    getNumTokensInHand() {
         return this._numTokensInHand;
     }
 
-    get numTokensOnBoard() {
+    getNumTokensOnBoard() {
         return this._numTokensOnBoard;
     }
 
-    get numTokensTotal() {
+    getNumTokensTotal() {
         return this._numTokensTotal;
     }
 
     equals(other) {
-        return other.playerId !== undefined ? this.playerId === other.playerId : false;
+        return (other && typeof other.getPlayerId === 'function') ? this.getPlayerId() === other.getPlayerId() : false;
     }
 
     placedToken() {
