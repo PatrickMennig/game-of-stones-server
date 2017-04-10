@@ -8,7 +8,7 @@ class MovementRules {
 
     static isValidMove(move, player, board) {
 
-        // a move at minimun conforms that there is at least a toId present
+        // a move at minimum conforms that there is at least a toId present
         // and that the field indices are in the correct range 0...23
 
         // check if the current board state allows the move he wants to make
@@ -22,22 +22,19 @@ class MovementRules {
         }
 
         // check if the player is moving by an allowed range for the phase he is in
-        const strategy = MovementRules._strategyForPhase(phaseFactory.createPhase(player));
-        if (true !== strategy.isValidMove(move, board)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    static _strategyForPhase(phase) {
-        const phaseName = phase.getPhase();
-        if (!strategies[phaseName]) {
-            strategies[phaseName] = movementRulesStrategiesFactory.strategyForPhase(phase);
-        }
-        return strategies[phaseName];
+        const strategy = strategyForPhase(phaseFactory.createPhase(player));
+        return strategy.isValidMove(move, board);
     }
 }
 
 
 module.exports = MovementRules;
+
+
+const strategyForPhase = (phase) => {
+    const phaseName = phase.getPhase();
+    if (!strategies[phaseName]) {
+        strategies[phaseName] = movementRulesStrategiesFactory.strategyForPhase(phase);
+    }
+    return strategies[phaseName];
+};

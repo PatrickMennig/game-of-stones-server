@@ -7,7 +7,7 @@ class PlayerRules {
         return player.getNumTokensInHand() > 0;
     }
 
-    static canFly() {
+    static canFly(player) {
         return player.getNumTokensTotal() === 3;
     }
 

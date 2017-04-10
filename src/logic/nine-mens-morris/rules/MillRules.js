@@ -30,36 +30,40 @@ class MillRules {
 
     static willBeMill(move, board) {
         const mills = millCombinations[move.getToId()];
-        return MillRules._isMill(move.getToken(), MillRules._positionsForMill(mills[0], board))
-            || MillRules._isMill(move.getToken(), MillRules._positionsForMill(mills[1], board));
+        return isMill(move.getToken(), positionsForMill(mills[0], board))
+            || isMill(move.getToken(), positionsForMill(mills[1], board));
     }
 
     static isInMill(id, token, board) {
         const mills = millCombinations[id];
-        return MillRules._checkMills(
+        return checkMills(
             token,
-            [MillRules._positionsForMill(mills[0], board).concat([board.getPosition(id)]),
-                MillRules._positionsForMill(mills[1], board).concat([board.getPosition(id)])]
+            [positionsForMill(mills[0], board).concat([board.getPosition(id)]),
+             positionsForMill(mills[1], board).concat([board.getPosition(id)])]
         );
     }
 
-    static _positionsForMill(mill, board) {
-        return mill.map(mId => board.getPosition(mId));
-    }
 
-    static _checkMills(token, mills) {
-        return MillRules._isMill(token, mills[0]) || MillRules._isMill(token, mills[1]);
-    }
-
-    static _isMill(token, positions) {
-        for(let i = 0; i < positions.length; ++i) {
-            if(positions[i].getToken() !== token) {
-                return false;
-            }
-        }
-        return true;
-    }
 
 }
 
 module.exports = MillRules;
+
+
+
+const positionsForMill = (mill, board) => {
+    return mill.map(mId => board.getPosition(mId));
+};
+
+const checkMills = (token, mills) => {
+    return isMill(token, mills[0]) || isMill(token, mills[1]);
+};
+
+const isMill = (token, positions) => {
+    for(let i = 0; i < positions.length; ++i) {
+        if(positions[i].getToken() !== token) {
+            return false;
+        }
+    }
+    return true;
+};
