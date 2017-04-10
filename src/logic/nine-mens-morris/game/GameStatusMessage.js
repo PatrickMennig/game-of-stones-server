@@ -13,8 +13,8 @@ class GameStatusMessage {
             timeEnded: this._meta.timeEnded,
             timeLastTurnPlayed: this._meta.timeLastTurnPlayed,
             state: this._meta.state,
-            activePlayer: this._meta.activePlayer.playerId,
-            inactivePlayer: this._meta.inactivePlayer.playerId,
+            activePlayer: this._meta.activePlayer.getPlayerId(),
+            inactivePlayer: this._meta.inactivePlayer.getPlayerId(),
             turnsTaken: this._meta.turnsTaken,
             boardSate: this._meta.boardState
         };

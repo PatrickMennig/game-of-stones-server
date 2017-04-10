@@ -33,18 +33,6 @@ class Game {
         this._moves = [];
     }
 
-    getGameId() {
-        return this._id;
-    }
-
-    getActivePlayer() {
-        return this._meta.activePlayer;
-    }
-
-    getInactivePlayer() {
-        return this._meta.inactivePlayer;
-    }
-
     addPlayer(player) {
         if (this._playerOne === null) {
             this._playerOne = player;
@@ -84,7 +72,7 @@ class Game {
             throw new Error(enumGameErrors.NOT_ACTIVE_PLAYER);
         }
 
-        const msg = Rules.isValid(move, this._board, this.getActivePlayer(), this.getInactivePlayer());
+        const msg = Rules.isValid(move, this._board, this._meta.activePlayer, this._meta.inactivePlayer);
 
         if (true !== msg.isValid) {
             throw new Error(enumGameErrors.INVALID_MOVE);
@@ -108,6 +96,7 @@ class Game {
 
         return status(this._meta);
     }
+
 
     _setPlayersStarting() {
         const starting            = starting(random50());
@@ -134,6 +123,7 @@ class Game {
 
 
 exports.createGame            = () => new Game();
+
 exports.createAndStartBotGame = (playerId) => {
     const g = new Game();
     const p = playerFactory.createHumanPlayer(playerId);
