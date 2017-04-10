@@ -2,6 +2,7 @@
 
 - check board errors, they are no longer used
 - check board:getState(), this might not work
+- create api for other modules
 
 
 - create test cases for
