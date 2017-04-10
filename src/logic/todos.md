@@ -2,7 +2,6 @@
 
 - check board errors, they are no longer used
 - check board:getState(), this might not work
-- implement millRules
 
 
 - create test cases for
@@ -17,7 +16,6 @@
         - get active player
         - get inactive player 
         - get status message
-    - MillRules
     - MovementRules
     - MovementRulesStrategies
     - Phase
