@@ -29,7 +29,7 @@ class Player {
     }
 
     getToken() {
-        return this.playerId;
+        return this.getPlayerId();
     }
 
     _setPlayerId(playerId) {
