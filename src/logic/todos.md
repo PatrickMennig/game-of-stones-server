@@ -3,6 +3,7 @@
 - check board errors, they are no longer used
 - check board:getState(), this might not work
 - create api for other modules
+- end game properly when someone wins
 
 
 - create test cases for
