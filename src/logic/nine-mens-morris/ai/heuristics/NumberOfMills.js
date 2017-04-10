@@ -7,7 +7,7 @@ class NumberOfMills extends Heuristic {
         let visitedFieldIds    = {};
         let ownMills           = 0;
         const millCombinations = this._millRules.getMillCombinations();
-        let token              = this._player.getToken();
+        let token              = move.getToken();
 
         for (let i = 0; i < 23; ++i) {
             // only look at ids that have not already been evaluated to be in a mill
@@ -15,7 +15,7 @@ class NumberOfMills extends Heuristic {
                 continue;
             }
             // check for the id if it is in a mill
-            if (i == move.getToId() && this._millRules.willBeMill(move, this._board)) {
+            if (i === move.getToId() && this._millRules.willBeMill(move, this._board)) {
                 ownMills += 1;
                 visitedFieldIds[i] = true;
                 millCombinations[i][0].forEach(index => visitedFieldIds[index] = true);
