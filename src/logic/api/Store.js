@@ -4,7 +4,7 @@
  *
  * You can directly instantiate and use it or extend it to your needs.
  * It supports adding, removing, getting of elements as
- * well as getting an interator of all elements stored.
+ * well as getting an iterator of all elements stored.
  */
 
 class Store {
