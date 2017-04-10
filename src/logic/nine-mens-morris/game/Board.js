@@ -37,7 +37,7 @@ class Board {
 exports.createBoard = () => new Board();
 exports.createBoardWithPattern = (pattern) => {
     const board = new Board();
-    pattern.forEach(p => board.resolve(p.token, p.toId, p.fromId, p.removeId));
+    pattern.forEach(p => board.resolve(p.token, p.id));
     return board;
 };
 
