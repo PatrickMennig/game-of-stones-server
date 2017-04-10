@@ -43,8 +43,9 @@ class MillRules {
         );
     }
 
-
-
+    static getMillCombinations() {
+        return millCombinations;
+    }
 }
 
 module.exports = MillRules;
