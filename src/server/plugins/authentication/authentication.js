@@ -18,7 +18,6 @@ exports.register = (server, options, next) => {
 
     createToken.init(options.secret, ALGORITHM, EXPIRATION);
 
-
     server.register(require('hapi-auth-jwt2'), (err) => {
 
         if (err) {
@@ -32,9 +31,7 @@ exports.register = (server, options, next) => {
         });
 
         server.auth.default('jwt');
-
     });
-
 
     server.register(require('hapi-auth-basic'), (err) => {
 
@@ -58,14 +55,15 @@ exports.register = (server, options, next) => {
             }
         });
 
+        next();
     });
-
-    next();
 };
+
 
 exports.register.attributes = {
     name: 'jwt-auth',
     multiple: false
 };
+
 
 exports.strategy = STRATEGY;

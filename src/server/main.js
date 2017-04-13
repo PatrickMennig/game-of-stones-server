@@ -1,5 +1,6 @@
 const Hapi           = require('hapi');
 const Authentication = require('./plugins/authentication/authentication');
+const Docs           = require('./plugins/docs/docs');
 
 
 const server = new Hapi.Server({
@@ -26,37 +27,40 @@ const onRegister = (err) => {
 };
 
 
-server.register({register: Authentication, options: {secret: 'verycoolsecret'}}, (err) => {
-
-    onRegister(err);
-
-    server.register(
-        {register: require('./api/botgame'), options: {auth: Authentication.strategy}},
-        {routes: {prefix: '/botgame'}},
-        onRegister
-    );
-
-    server.register(require('vision'), onRegister);
-    server.register(require('inert'), onRegister);
-    server.register(require('lout'), onRegister);
-
-    server.start(err => {
-        if (err) {
-            throw err;
+server.register(
+    {
+        register: Authentication,
+        options: {
+            secret: 'verycoolsecret'
         }
-        console.log(`Server running at ${server.info.uri}`);
-    });
+    },
+    onRegister
+);
 
+
+server.register(
+    {
+        register: require('./api/botgame/botgame'),
+        options: {
+            auth: Authentication.strategy,
+            dependencies: ['jwt-auth']
+        }
+    },
+    {
+        routes: {
+            prefix: '/botgame'
+        }
+    },
+    onRegister
+);
+
+
+server.register(Docs, onRegister);
+
+
+server.start(err => {
+    if (err) {
+        throw err;
+    }
+    console.info(`[API-Server] Server running at ${server.info.uri}`);
 });
-
-/*
-
- */
-
-
-
-
-
-
-
-
