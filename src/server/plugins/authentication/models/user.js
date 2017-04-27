@@ -1,8 +1,7 @@
 const level  = require('level');
 const bcyrpt = require('bcrypt');
 
-const DB_NAME = './users';
-const db      = level(DB_NAME);
+const db      = level('./level/users');
 
 
 // TODO only for testing, always creates root account

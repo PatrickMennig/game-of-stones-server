@@ -12,7 +12,9 @@ class Board {
     }
 
     getState() {
-        return this._board.entries().map(p => p.getToken());
+        const positions = [...this._board].map((iter) => iter[1]);
+        const tokens = positions.map(p => p.getToken());
+        return tokens;
     }
 
     resolve(token, toId, fromId = null, removeId = null) {

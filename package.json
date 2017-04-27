@@ -18,6 +18,7 @@
   "dependencies": {
     "4": "0.0.0",
     "bcrypt": "^1.0.2",
+    "boom": "^4.3.1",
     "hapi": "^16.1.1",
     "hapi-auth-basic": "^4.2.0",
     "hapi-auth-jwt2": "^7.2.4",
@@ -25,6 +26,7 @@
     "joi": "^10.4.1",
     "jsonwebtoken": "^7.3.0",
     "level": "^1.6.0",
+    "level-pathwise": "^3.0.3",
     "lout": "^10.0.1",
     "vision": "^4.1.1"
   }

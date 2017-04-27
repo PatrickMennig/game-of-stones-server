@@ -1,3 +1,6 @@
+const botgame = require('../models/botgame');
+
+
 exports.register = (server, options, next) => {
 
     server.route({
@@ -11,7 +14,14 @@ exports.register = (server, options, next) => {
                 'This will do a database lookup and return all ids of all bot games known to the server.'
             ]
         },
-        handler: (request, reply) => reply('List of all running botgames')
+        handler: (request, reply) => {
+
+            Promise
+                .all([botgame.getAllFinished(), botgame.getAllRunning()])
+                .then(games => reply([...games[0], ...games[1]]))
+                .catch(err => reply(err.message).status(500));
+
+        }
     });
 
     next();

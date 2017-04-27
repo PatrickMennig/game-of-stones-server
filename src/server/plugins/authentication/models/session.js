@@ -1,7 +1,6 @@
 const level = require('level');
 
-const DB_NAME = './sessions';
-const db      = level(DB_NAME);
+const db      = level('./level/sessions');
 
 
 exports.putSession = (username, obj, callback) => {

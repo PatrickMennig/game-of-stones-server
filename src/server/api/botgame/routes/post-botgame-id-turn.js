@@ -1,14 +1,14 @@
-const schemaGameId       = require('../schemas/gameId');
-const schemaGroupId      = require('../schemas/groupId');
 const schemaTurn         = require('../schemas/turn');
 const schemaTurnResponse = require('../schemas/turnResponse');
+const Boom               = require('boom');
+const botgame            = require('../models/botgame');
 
 
 exports.register = (server, options, next) => {
 
     server.route({
         method: 'POST',
-        path: '/{gameid}/turn',
+        path: '/{gameId}/turn',
         config: {
             auth: options.auth,
             description: 'Play a turn in a botgame',
@@ -19,17 +19,35 @@ exports.register = (server, options, next) => {
                 'You will need to authenticate against the server to join a botgame.'
             ],
             validate: {
-                payload: {
-                    groupid: schemaGroupId,
-                    gameid: schemaGameId,
-                    turn: schemaTurn
-                }
+                payload: schemaTurn
             },
             response: {
                 schema: schemaTurnResponse
             }
         },
-        handler: (request, reply) => reply('Play a turn in a botgame')
+        handler: (request, reply) => {
+
+            const groupId = request.auth.credentials.name;
+            const gameId = request.params.gameId;
+            const turn = request.payload;
+
+            botgame
+                .move(gameId, groupId, turn)
+                .then(msg => {
+                    const { id, game, payload } = msg;
+                    return reply({
+                        gameId: id,
+                        activePlayer: payload.activePlayer,
+                        boardState: payload.boardState,
+                        state: payload.state,
+                        timeStarted: payload.timeStarted,
+                        timeLastTurnPlayed: payload.timeLastTurnPlayed,
+                        turnsTaken: payload.turnsTaken
+                    });
+                }).catch(err => {
+                    return reply(err);
+                });
+        }
     });
 
     next();

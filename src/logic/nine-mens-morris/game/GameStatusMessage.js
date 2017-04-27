@@ -13,10 +13,10 @@ class GameStatusMessage {
             timeEnded: this._meta.timeEnded,
             timeLastTurnPlayed: this._meta.timeLastTurnPlayed,
             state: this._meta.state,
-            activePlayer: this._meta.activePlayer.getPlayerId(),
-            inactivePlayer: this._meta.inactivePlayer.getPlayerId(),
+            activePlayer: this._meta.activePlayer ? this._meta.activePlayer.getPlayerId() : null,
+            inactivePlayer: this._meta.inactivePlayer ? this._meta.inactivePlayer.getPlayerId() : null,
             turnsTaken: this._meta.turnsTaken,
-            boardSate: this._meta.boardState
+            boardState: this._meta.boardState
         };
     }
 }

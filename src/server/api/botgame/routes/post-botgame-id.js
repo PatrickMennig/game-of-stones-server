@@ -1,13 +1,13 @@
-const schemaGameId       = require('../schemas/gameId');
-const schemaGroupId      = require('../schemas/groupId');
-const schemaJoinResponse = require('../schemas/joinResponse');
+const schemaTurnResponse = require('../schemas/turnResponse');
+const Boom               = require('boom');
+const botgame            = require('../models/botgame');
 
 
 exports.register = (server, options, next) => {
 
     server.route({
         method: 'POST',
-        path: '/{gameid}',
+        path: '/{gameId}',
         config: {
             auth: options.auth,
             description: 'Join a botgame',
@@ -17,16 +17,39 @@ exports.register = (server, options, next) => {
                 'You will need to authenticate against the server to join a botgame.'
             ],
             validate: {
-                payload: {
-                    groupid: schemaGroupId,
-                    gameid: schemaGameId
-                }
+                //payload: {
+                //    groupid: schemaGroupId
+                //}
             },
             response: {
-                schema: schemaJoinResponse
+                schema: schemaTurnResponse
             }
         },
-        handler: (request, reply) => reply('Join a botgame')
+        handler: (request, reply) => {
+
+            const groupId = request.auth.credentials.name;
+            const gameId = request.params.gameId;
+
+            botgame
+                .join(gameId, groupId)
+                .then(msg => {
+                    const {id} = msg;
+                    return botgame.start(id);
+                })
+                .then(msg => {
+                    const {id, game, payload} = msg;
+                    return reply({
+                        gameId: id,
+                        activePlayer: payload.activePlayer,
+                        boardState: payload.boardState,
+                        state: payload.state,
+                        timeStarted: payload.timeStarted,
+                        timeLastTurnPlayed: payload.timeLastTurnPlayed,
+                        turnsTaken: payload.turnsTaken
+                    });
+                })
+                .catch(err => reply(err));
+        }
     });
 
     next();

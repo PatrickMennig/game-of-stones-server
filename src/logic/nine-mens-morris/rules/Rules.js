@@ -16,20 +16,20 @@ class Rules {
             return rulesMessageFactory.getMessageWithProperties(false, enumRulesMessages.MOVE_NOT_ALLOWED);
         }
 
-        const willCloseMill  = MillRules.willCloseMill(move, board);
-        const isValidRemoval = willCloseMill ? MillRules.isValidRemoval(move, board) : false;
+        const willBeMill  = MillRules.willBeMill(move, board);
+        const isValidRemoval = willBeMill ? MillRules.isValidRemoval(move, board) : false;
 
-        if (willCloseMill && true !== isValidRemoval) {
+        if (willBeMill && true !== isValidRemoval) {
             return rulesMessageFactory.getMessageWithProperties(false, enumRulesMessages.INVALID_REMOVAL);
         }
 
         const numTokensOnBoard = inactivePlayer.getNumTokensOnBoard();
 
-        if (willCloseMill && isValidRemoval && numTokensOnBoard <= 0) {
+        if (willBeMill && isValidRemoval && numTokensOnBoard <= 0) {
             return rulesMessageFactory.getMessageWithProperties(false, enumRulesMessages.INVALID_REMOVAL);
         }
 
-        if (willCloseMill && isValidRemoval && numTokensOnBoard === 3 && inactivePlayer.getNumTokensTotal() === 3) {
+        if (willBeMill && isValidRemoval && numTokensOnBoard === 3 && inactivePlayer.getNumTokensTotal() === 3) {
             return rulesMessageFactory.getMessageWithProperties(true, enumRulesMessages.WINNING_MOVE, true);
         }
 

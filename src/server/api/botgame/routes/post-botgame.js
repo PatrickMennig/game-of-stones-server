@@ -1,5 +1,5 @@
-const schemaGroupId        = require('../schemas/groupId');
 const schemaCreateResponse = require('../schemas/createResponse');
+const botgame              = require('../models/botgame');
 
 
 exports.register = (server, options, next) => {
@@ -15,16 +15,28 @@ exports.register = (server, options, next) => {
                 'You will need to authenticate against the server to create a botgame.'
             ],
             validate: {
-                payload: {
-                    groupid: schemaGroupId
-                }
+                //payload: {
+                //    groupid: schemaGroupId
+                //}
             },
             response: {
                 schema: schemaCreateResponse
             }
         },
         handler: (request, reply) => {
-            return reply({gameid: 'not a real game id'})
+
+            const groupId = request.auth.credentials.name;
+
+            botgame
+                .create(groupId).then(msg => {
+                    return reply({
+                        gameId: msg.id
+                    });
+                })
+                .catch((err) =>{
+                    return reply(err);
+                });
+
         }
     });
 
