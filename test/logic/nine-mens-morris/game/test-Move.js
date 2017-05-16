@@ -49,12 +49,12 @@ describe('Move', function () {
     describe('is placing move', function () {
 
         it('should return true for a placing move (phase 1)', function () {
-            const move = moveFactory.createMove('token', 0);
+            const move = moveFactory.createMove('token', 0, null, 1);
             assert.equal(move.isPlacingMove(), true);
         });
 
         it('should return false for a non placing move (phase 1)', function () {
-            const move = moveFactory.createMove('token', 0, 1);
+            const move = moveFactory.createMove('token', 0, 1, 3);
             assert.equal(move.isPlacingMove(), false);
         });
 
@@ -63,12 +63,12 @@ describe('Move', function () {
     describe('is removing move', function () {
 
         it('should return true for a removing move', function () {
-            const move = moveFactory.createMove('token', 0, null, 1);
+            const move = moveFactory.createMove('token', 12, null, 3);
             assert.equal(move.isRemovingMove(), true);
         });
 
         it('should return false for a non removing move', function () {
-            const move = moveFactory.createMove('token', 0, 1);
+            const move = moveFactory.createMove('token', 17, 1);
             assert.equal(move.isRemovingMove(), false);
         });
 

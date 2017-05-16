@@ -61,6 +61,18 @@ describe('MillRules', function () {
             assert.equal(willBeMill, false);
         });
 
+        it('should return false for a token that will move within a mill', function () {
+            const b          = boardFactory.createBoardWithPattern(
+                [
+                    {token: PLAYER_ONE_TOKEN, id: 0},
+                    {token: PLAYER_ONE_TOKEN, id: 2}
+                ]
+            );
+            const m          = moveFactory.createMove(PLAYER_ONE_TOKEN, 1, 2);
+            const willBeMill = MillRules.willBeMill(m, b);
+            assert.equal(willBeMill, false);
+        });
+
         it('should return false for a different players token that will not be in a mill', function () {
             const b          = boardFactory.createBoardWithPattern(
                 [

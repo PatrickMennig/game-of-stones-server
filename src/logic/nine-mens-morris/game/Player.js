@@ -68,14 +68,14 @@ class Player {
     }
 
     lostToken() {
-        if (this._numTokensTotal <= 0) {
+        if (this._numTokensTotal <= 2) {
             throw new Error(enumPlayerErrors.NO_TOKENS_LEFT);
         }
         this._numTokensTotal--;
         this._numTokensOnBoard--;
     }
 
-    getNextMove() {
+    getNextMove(board, inactivePlayer) {
         if (this._nextMove === null) {
             throw new Error(enumPlayerErrors.NO_NEXT_MOVE);
         }
@@ -90,7 +90,7 @@ class Player {
 
 }
 
-
+exports.Player = Player;
 exports.createPlayer      = (playerId, type) => new Player(playerId, type);
 exports.createHumanPlayer = (playerId) => new Player(playerId, enumPlayerTypes.HUMAN);
 exports.createBotPlayer   = () => new Player(`bot_${idGenerator.nextId(8)}`, enumPlayerTypes.BOT);

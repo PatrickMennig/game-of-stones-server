@@ -1,6 +1,6 @@
 class MRPhase {
 
-    isValidMove() {
+    isValidMove(move, player, board) {
         throw new Error('Abstract method has to be implemented in subclass.');
     }
 
@@ -12,7 +12,20 @@ class MRPhase {
 
 class MRPhaseOne extends MRPhase {
 
-    isValidMove(move, board) {
+    isValidMove(move, player, board) {
+
+        if(player.getNumTokensInHand() <= 0) {
+            return false;
+        }
+
+        if(false === move.getToId()) {
+            return false;
+        }
+
+        if(false !== move.getFromId()) {
+            return false;
+        }
+
         return ! this._isOccupied(move.getToId(), board);
     }
 
@@ -21,8 +34,21 @@ class MRPhaseOne extends MRPhase {
 
 class MRPhaseTwo extends MRPhase {
 
-    isValidMove(move, board) {
+    isValidMove(move, player, board) {
+
+        if(player.getNumTokensInHand() > 0) {
+            return false;
+        }
+
+        if(false === move.getToId()) {
+            return false;
+        }
+
         if (false === move.getFromId()) {
+            return false;
+        }
+
+        if(true !== board.getPosition(move.getFromId()).isOwnToken(player.getToken())) {
             return false;
         }
 
@@ -38,7 +64,24 @@ class MRPhaseTwo extends MRPhase {
 
 class MRPhaseThree extends MRPhase {
 
-    isValidMove(move, board) {
+    isValidMove(move, player, board) {
+
+        if(player.getNumTokensInHand() > 0) {
+            return false;
+        }
+
+        if(false === move.getToId()) {
+            return false;
+        }
+
+        if (false === move.getFromId()) {
+            return false;
+        }
+
+        if(true !== board.getPosition(move.getFromId()).isOwnToken(player.getToken())) {
+            return false;
+        }
+
         return ! this._isOccupied(move.getToId(), board);
     }
 
@@ -52,7 +95,7 @@ exports.strategyForPhase = (phase) => {
             return new MRPhaseOne();
         case phases.PHASE_2_MOVING:
             return new MRPhaseTwo();
-        case phase.PHASE_3_FLYING:
+        case phases.PHASE_3_FLYING:
             return new MRPhaseThree();
         default:
             throw new Error('Unhandled phase in switch case - this should never happen!');

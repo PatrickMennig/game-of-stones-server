@@ -1,13 +1,16 @@
-const gameFactory   = require('../nine-mens-morris/game/Game');
-const playerFactory = require('../nine-mens-morris/game/Player');
-const moveFactory   = require('../nine-mens-morris/game/Move');
+const gameFactory      = require('../nine-mens-morris/game/Game');
+const playerFactory    = require('../nine-mens-morris/game/Player');
+const moveFactory      = require('../nine-mens-morris/game/Move');
+const randomBotFactory = require('../nine-mens-morris/ai/bot/RandomBot');
+const enumGameStates   = require('../nine-mens-morris/game/enum/enumGameStates');
 
 
 class Api {
 
     static botGame(playerId) {
 
-        const g = gameFactory.createBotGame(playerId);
+        const g = gameFactory.createGame();
+        g.addPlayer(randomBotFactory.createRandomBot());
 
         return {
             id: g.getId(),
@@ -38,19 +41,19 @@ class Api {
         }
     }
 
-
-
-
-    static resolveMove(game, groupId, turn) {
+    static resolveMove(game, groupId, turn = null) {
 
         const player = game.getActivePlayer();
 
-        if(player.getPlayerId() !== groupId) {
+        if (player.getPlayerId() !== groupId) {
             throw new Error('Player trying to send move is not the active player.')
         }
 
-        const move = moveFactory.createMove(player.getToken(), turn.toId, turn.fromId, turn.removeId);
-        player.setNextMove(move);
+        if (turn) {
+            // player moves have to be set, bot moves are calculated when game asks for it
+            const move = moveFactory.createMove(player.getToken(), turn.toId, turn.fromId, turn.removeId);
+            player.setNextMove(move);
+        }
 
         const msg = game.move();
 
@@ -61,21 +64,18 @@ class Api {
         }
     }
 
-
-
-
-
-    static versusGame(playerOneId, playerTwoId) {
-        const g = gameFactory.createGame();
-        g.addPlayer(playerFactory.createHumanPlayer(playerOneId));
-        g.addPlayer(playerFactory.createHumanPlayer(playerTwoId));
-        g.startGame();
-        return g;
+    static isRunning(state) {
+        return state === enumGameStates.STATE_RUNNING;
     }
 
-    static gameStatusMessage(game) {
-        return game.getStatusMessage();
+    static isError(state) {
+        return state === enumGameStates.STATE_ERROR;
     }
+
+    static isFinished(state) {
+        return state === enumGameStates.STATE_FINISHED;
+    }
+
 
 
 }

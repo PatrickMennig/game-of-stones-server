@@ -43,6 +43,10 @@ class Position {
         this._token = token;
     }
 
+    getNeighbors() {
+        return Object.keys(this._neighbors).map(k => this._neighbors[k]).filter(n => n !== null);
+    }
+
     getTopNeighbor() {
         if (typeof this._neighbors.top !== 'object') {
             throw new Error(enumPositionErrors.POSITION_NOT_SET);
@@ -91,7 +95,10 @@ class Position {
         const neighbors  = Object.keys(this._neighbors).map(k => this._neighbors[k]);
         let isNeighbored = false;
         neighbors.forEach(neighbor => {
-            if (neighbor.id === otherPosition.id) {
+            if(neighbor === null) {
+                return;
+            }
+            if (neighbor.getId() === otherPosition.getId()) {
                 isNeighbored = true;
             }
         });

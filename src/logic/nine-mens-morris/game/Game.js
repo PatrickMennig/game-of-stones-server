@@ -74,6 +74,10 @@ class Game {
         return status(this._meta);
     }
 
+    isRunning() {
+        return this._meta.state === enumGameStates.STATE_RUNNING;
+    }
+
     getStatusMessage() {
         return status(this._meta);
     }
@@ -84,16 +88,30 @@ class Game {
             throw new Error(enumGameErrors.NOT_RUNNING_STATE);
         }
 
-        const move = this._meta.activePlayer.getNextMove();
+        //DEBUG
+        //console.log('Hand:  ' + this._meta.activePlayer.getNumTokensInHand());
+        //console.log('Board: ' + this._meta.activePlayer.getNumTokensOnBoard());
+        //console.log('Total: ' + this._meta.activePlayer.getNumTokensTotal());
+
+        const move = this._meta.activePlayer.getNextMove(this._board, this._meta.inactivePlayer);
+
+        //DEBUG
+        //console.log(move);
 
         const msg = Rules.isValid(move, this._board, this._meta.activePlayer, this._meta.inactivePlayer);
 
-        if (true !== msg.isValid) {
+        if (!msg || msg.isValid !== true) {
             this._meta.state = enumGameStates.STATE_ERROR;
             throw new Error(enumGameErrors.INVALID_MOVE);
         }
 
         this._board.resolve(move.getToken(), move.getToId(), move.getFromId(), move.getRemoveId());
+
+        //console.log(this._board.getState());
+
+        if (msg.endsGame) {
+            this._endGame();
+        }
 
         if (move.isPlacingMove()) {
             this._meta.activePlayer.placedToken();
@@ -103,11 +121,23 @@ class Game {
             this._meta.inactivePlayer.lostToken();
         }
 
-        if (msg.endsGame) {
-            this._endGame();
+        this._updateMeta(move, msg.endsGame);
+
+
+        const p1Tokens = this._meta.boardState.filter(v => v === this._meta.inactivePlayer.getToken()).length;
+        const p2Tokens = this._meta.boardState.filter(v => v === this._meta.activePlayer.getToken()).length;
+
+        if(this._meta.inactivePlayer.getNumTokensOnBoard() !== p1Tokens) {
+            throw new Error('Diff')
         }
 
-        this._updateMeta(move);
+        if(this._meta.activePlayer.getNumTokensOnBoard() !== p2Tokens) {
+            throw new Error('Diff')
+        }
+
+        //DEBUG
+        //console.log(hash(this._board.getState()));
+        //console.log(hash(this._meta.boardState));
 
         return status(this._meta);
     }
@@ -138,7 +168,7 @@ class Game {
     }
 
     _endGame() {
-        throw new Error('Not yet implemented');
+        this._meta.state = enumGameStates.STATE_FINISHED;
     }
 }
 

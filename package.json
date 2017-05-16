@@ -7,13 +7,14 @@
     "test": "test"
   },
   "scripts": {
-    "server": "node src/server/main.js",
+    "start": "node src/server/main.js",
     "test": "mocha --recursive"
   },
   "author": "Patrick Mennig",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "object-hash": "^1.1.8"
   },
   "dependencies": {
     "4": "0.0.0",

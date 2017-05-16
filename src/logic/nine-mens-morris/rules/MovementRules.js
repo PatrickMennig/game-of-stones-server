@@ -16,14 +16,15 @@ class MovementRules {
         if (move.getFromId() && true !== board.getPosition(move.getFromId()).isOwnToken(player.getToken())) {
             return false;
         }
+        // currently checked in strategies
         // b) to-field is empty
-        if (true !== board.getPosition(move.getToId()).isEmpty()) {
-            return false;
-        }
+        //if (true !== board.getPosition(move.getToId()).isEmpty()) {
+        //    return false;
+        //}
 
         // check if the player is moving by an allowed range for the phase he is in
         const strategy = strategyForPhase(phaseFactory.createPhase(player));
-        return strategy.isValidMove(move, board);
+        return strategy.isValidMove(move, player, board);
     }
 }
 

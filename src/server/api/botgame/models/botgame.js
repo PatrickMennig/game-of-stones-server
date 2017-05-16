@@ -1,9 +1,9 @@
 const Boom = require('boom');
 
 const Api      = require('../../../../logic/api/Api');
-const MemStore = require('./../utils/MemStore');
+const MemStore = require('./../../../utils/MemStore');
 const memStore = new MemStore();
-const DBStore  = require('./../utils/DBStore');
+const DBStore  = require('./../../../utils/DBStore');
 const dbStore  = new DBStore();
 
 
@@ -11,9 +11,11 @@ exports.getAllFinished = () => {
     return Promise.resolve().then(() => dbStore.getAll());
 };
 
+
 exports.getAllRunning = () => {
     return Promise.resolve().then(() => memStore.getAll());
 };
+
 
 exports.create = (groupId) => {
     return new Promise((resolve, reject) => {
@@ -40,6 +42,7 @@ exports.create = (groupId) => {
 
 };
 
+
 exports.join = (gameId, groupId) => {
     return new Promise((resolve, reject) => {
         memStore
@@ -52,6 +55,7 @@ exports.join = (gameId, groupId) => {
             });
     });
 };
+
 
 exports.start = (gameId) => {
     return new Promise((resolve, reject) => {
@@ -77,6 +81,7 @@ exports.start = (gameId) => {
     });
 };
 
+
 exports.move = (gameId, groupId, turn) => {
     return new Promise((resolve, reject) => {
         memStore
@@ -92,21 +97,27 @@ exports.move = (gameId, groupId, turn) => {
                 return msg;
             })
             .then(msg => {
+                if(true !== Api.isRunning(msg.payload.state)) {
+                    finish(msg.id, msg.game);
+                    return resolve(msg);
+                }
                 return resolve(msg);
             })
             .catch(err => {
                 return reject(Boom.create(400, err.message));
             });
     });
-
 };
 
-exports.finish = (id) => {
-    return new Promise((resolve, reject) => {
 
+const finish = (id, game) => {
+    dbStore.put(id, game).then(game => {
+        console.log('[Server Botgame]   Saved botgame to database.');
+    }).catch(err => {
+        console.error('[Server Botgame]   Error saving botgame to database.');
+        console.error(err);
     });
 };
-
 
 const isBot = (playerId) => playerId.match("^bot_");
 
@@ -115,13 +126,8 @@ const moveBot = (game) => {
 
         const bot = game.getActivePlayer();
 
-        //todo use ai here
-        const turn = {
-            toId: 1
-        };
-
         try {
-            return Api.resolveMove(game, bot.getPlayerId(), turn);
+            return Api.resolveMove(game, bot.getPlayerId());
         } catch (e) {
             throw Boom.create(400, e.message);
         }

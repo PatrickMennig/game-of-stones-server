@@ -1,5 +1,7 @@
 const positionFactory = require('./Position');
 
+const hash = require('object-hash');
+
 
 class Board {
 
@@ -8,30 +10,51 @@ class Board {
     }
 
     getPosition(id) {
-        return this._board.get(positionFactory.id(id));
+        return this._board[positionFactory.id(id)];
     }
 
     getState() {
+        /*
         const positions = [...this._board].map((iter) => iter[1]);
         const tokens = positions.map(p => p.getToken());
         return tokens;
+        */
+        return this._board.map(p => p.getToken());
     }
 
-    resolve(token, toId, fromId = null, removeId = null) {
+    resolve(token, toId, fromId, removeId) {
+
+        /*
+        const copy = this.getState();
+        let from = token;
+        if(fromId !== false) {
+            from = copy[fromId];
+            copy[fromId] = 'NO_TOKEN';
+        }
+        copy[toId] = from;
+        if(removeId !== false) {
+            copy[removeId] = 'NO_TOKEN';
+        }
+
+        if(hash(copy) !== hash(this.getState())) {
+            throw new Error('Diff')
+        }
+        */
 
         this.getPosition(toId).setToken(token);
 
-        if (fromId) {
+        if (typeof fromId === 'number') {
             this.getPosition(fromId).setTokenEmpty();
         }
 
-        if (removeId) {
+        if (typeof removeId === 'number') {
             this.getPosition(removeId).setTokenEmpty();
         }
+
     }
 
     isAdjacent(posOne, posTwo) {
-        return posOne.isNeighborOf(posTwo);
+        return this.getPosition(posOne).isNeighborOf(this.getPosition(posTwo));
     }
 }
 
@@ -44,6 +67,7 @@ exports.createBoardWithPattern = (pattern) => {
 };
 
 
+
 const setupBoard = () => {
 
     const board = emptyBoard();
@@ -51,10 +75,10 @@ const setupBoard = () => {
     for (let i = 0; i <= 21; i += 3) {
 
         // horizontal connections
-        board.get(i).setRightNeighbor(board.get(i + 1));
-        board.get(i + 1).setRightNeighbor(board.get(i + 2));
-        board.get(i + 2).setLeftNeighbor(board.get(i + 1));
-        board.get(i + 1).setLeftNeighbor(board.get(i));
+        board[i].setRightNeighbor(board[i + 1]);
+        board[i + 1].setRightNeighbor(board[i + 2]);
+        board[i + 2].setLeftNeighbor(board[i + 1]);
+        board[i + 1].setLeftNeighbor(board[i]);
 
     }
 
@@ -85,9 +109,9 @@ const setupBoard = () => {
     return board;
 };
 
-const emptyBoard = () => new Map(new Array(24).fill(null).map((v, i) => [i, positionFactory.createPosition(i)]));
+const emptyBoard = () => new Array(24).fill(null).map((v, i) => positionFactory.createPosition(i));
 
 const setNeighboredVertical = (board, idA, idB) => {
-    board.get(idA).setBottomNeighbor(board.get(idB));
-    board.get(idB).setTopNeighbor(board.get(idA));
+    board[idA].setBottomNeighbor(board[idB]);
+    board[idB].setTopNeighbor(board[idA]);
 };

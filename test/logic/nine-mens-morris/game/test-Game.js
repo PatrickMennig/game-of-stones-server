@@ -1,20 +1,35 @@
-const assert = require('assert');
-const gameFactory = require('../../../../src/logic/nine-mens-morris/game/Game');
+const assert            = require('assert');
+const gameFactory       = require('../../../../src/logic/nine-mens-morris/game/Game');
+const playerFactory     = require('../../../../src/logic/nine-mens-morris/game/Player');
+const moveFactory       = require('../../../../src/logic/nine-mens-morris/game/Move');
+const enumGameStates    = require('../../../../src/logic/nine-mens-morris/game/enum/enumGameStates');
+const enumGameErrors    = require('../../../../src/logic/nine-mens-morris/game/errors/enumGameErrors');
+const enumPositionToken = require('../../../../src/logic/nine-mens-morris/game/enum/enumPositionTokens');
 
 
 describe('Game', function () {
 
     describe('constructor', function () {
 
-        it('should create a new game in status init');
+        it('should create a new game in status init', function () {
+            const g   = gameFactory.createGame();
+            const msg = g.getStatusMessage();
+            assert.equal(msg.state, enumGameStates.STATE_INIT);
+        });
 
-        it('should create a new game with correct meta information');
+        it('should create a new game with an empty board', function () {
+            const g          = gameFactory.createGame();
+            const boardState = g.getStatusMessage().boardState;
 
+            const numOfNonEmpty = boardState.filter(p => p !== enumPositionToken.TOKEN_EMPTY).length;
+
+            assert.equal(numOfNonEmpty, 0);
+        });
     });
 
     describe('factory', function () {
 
-        it('should create a new bot game for one human player with the given id and start the game');
+        it('should create a new bot game');
 
     });
 
@@ -42,9 +57,53 @@ describe('Game', function () {
 
         it('should accept a correct move');
 
-        it('should decline a move for an incative player');
+        it('should decline a move for an incative player', function (done) {
+            const g  = gameFactory.createGame();
+            const p1 = playerFactory.createBotPlayer();
+            const p2 = playerFactory.createBotPlayer();
 
-        it('should decline a move that is against the rules');
+            g.addPlayer(p1);
+            g.addPlayer(p2);
+            g.startGame();
+
+            p1.setNextMove(moveFactory.createMove(g.getActivePlayer().getToken(), 3));
+            p2.setNextMove(moveFactory.createMove(g.getActivePlayer().getToken(), 2));
+
+            g.move();
+            try {
+                g.move();
+            } catch (err) {
+                if(err.message === enumGameErrors.INVALID_MOVE) {
+                    return done();
+                }
+                return done(err);
+            }
+            return done(new Error('Should throw'));
+        });
+
+        it('should decline a move that is against the rules', function (done) {
+            const g  = gameFactory.createGame();
+            const p1 = playerFactory.createBotPlayer();
+            const p2 = playerFactory.createBotPlayer();
+
+            g.addPlayer(p1);
+            g.addPlayer(p2);
+            g.startGame();
+
+            p1.setNextMove(moveFactory.createMove(p1.getToken(), 3));
+            p2.setNextMove(moveFactory.createMove(p2.getToken(), 3));
+
+            g.move();
+            try {
+                g.move();
+            } catch (err) {
+                if(err.message === enumGameErrors.INVALID_MOVE) {
+                    return done();
+                }
+                return done(err);
+            }
+            return done(new Error('Should throw'));
+        });
 
         it('should correctly update the board according to the move');
 

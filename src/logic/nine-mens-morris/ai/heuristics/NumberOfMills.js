@@ -9,7 +9,7 @@ class NumberOfMills extends Heuristic {
         const millCombinations = this._millRules.getMillCombinations();
         let token              = move.getToken();
 
-        for (let i = 0; i < 23; ++i) {
+        for (let i = 0; i < 24; ++i) {
             // only look at ids that have not already been evaluated to be in a mill
             if (visitedFieldIds.hasOwnProperty(i)) {
                 continue;
@@ -35,7 +35,7 @@ class NumberOfMills extends Heuristic {
         visitedFieldIds = {};
         token           = this._otherPlayer.getToken();
 
-        for (let i = 0; i < 23; ++i) {
+        for (let i = 0; i < 24; ++i) {
             // only look at ids that have not already been evaluated to be in a mill
             if (visitedFieldIds.hasOwnProperty(i)) {
                 continue;

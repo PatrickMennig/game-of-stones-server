@@ -18,7 +18,9 @@ exports.register = (server, options, next) => {
 
             Promise
                 .all([botgame.getAllFinished(), botgame.getAllRunning()])
-                .then(games => reply([...games[0], ...games[1]]))
+                .then(games =>
+                    reply( JSON.stringify([...games[0], ...games[1]]) ).header('Content-Type', 'application/json')
+                )
                 .catch(err => reply(err.message).status(500));
 
         }

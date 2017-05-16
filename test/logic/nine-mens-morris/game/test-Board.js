@@ -271,8 +271,45 @@ describe('Board', function () {
             const t1 = board.getPosition(1).getToken();
             const t2 = board.getPosition(2).getToken();
             assert.deepEqual(
-                {t0: enumPositionTokens.TOKEN_EMPTY, t1: PLAYER_TOKEN, t2: enumPositionTokens.TOKEN_EMPTY},
-                {t0: t0, t1: t1, t2: t2}
+                {t0: t0, t1: t1, t2: t2},
+                {t0: enumPositionTokens.TOKEN_EMPTY, t1: PLAYER_TOKEN, t2: enumPositionTokens.TOKEN_EMPTY}
+            );
+        });
+
+    });
+
+
+    describe('getState', function () {
+
+        it('should correctly reflect state after a placing move', function () {
+            const board = boardFactory.createBoard();
+            board.resolve(PLAYER_TOKEN, 1);
+            const s = board.getState();
+            assert.equal(PLAYER_TOKEN, s[1]);
+        });
+
+        it('should correctly reflect state after a moving move', function () {
+            const board = boardFactory.createBoard([{token: PLAYER_TOKEN, toId: 0}]);
+            board.resolve(PLAYER_TOKEN, 1, 0);
+            const s = board.getState();
+            const t0 = s[0];
+            const t1 = s[1];
+            assert.deepEqual(
+                {t0: t0, t1: t1},
+                {t0: enumPositionTokens.TOKEN_EMPTY, t1: PLAYER_TOKEN}
+            );
+        });
+
+        it('should correctly reflect state after a moving move with remove', function () {
+            const board = boardFactory.createBoard([{token: PLAYER_TOKEN, toId: 0}, {token: 'ENEMY', toId: 2}]);
+            board.resolve(PLAYER_TOKEN, 1, 0, 2);
+            const s = board.getState();
+            const t0 = s[0];
+            const t1 = s[1];
+            const t2 = s[2];
+            assert.deepEqual(
+                {t0: t0, t1: t1, t2: t2},
+                {t0: enumPositionTokens.TOKEN_EMPTY, t1: PLAYER_TOKEN, t2: enumPositionTokens.TOKEN_EMPTY}
             );
         });
 
