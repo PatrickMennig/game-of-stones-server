@@ -8,7 +8,9 @@ exports.register = (server, options, next) => {
         method: 'POST',
         path: '/updatecredentials',
         config: {
-            auth: 'jwt',
+            auth: {
+                strategy: 'jwt'
+            },
             description: 'Update credentials of your system account',
             notes: [
                 'Send your new password in the body.',
@@ -22,7 +24,7 @@ exports.register = (server, options, next) => {
         },
         handler: (request, reply) => {
             const decoded = request.auth.credentials;
-            user.changePassword(decoded.name, request.payload.password, (err, user) => {
+            user.changePassword(decoded.username, request.payload.password, (err, user) => {
                 if(err) {
                     return reply(err);
                 }

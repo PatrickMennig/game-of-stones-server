@@ -17,11 +17,11 @@ exports.createToken = (user) => {
         throw new Error('Init create token prior to usage.');
     }
 
-    let scopes;
+    let scopes = ['user'];
 
     if (user.admin) {
-        scopes = 'admin';
+        scopes.push('admin');
     }
 
-    return jwt.sign({id: user.id, name: user.username, scope: scopes}, secret, {algorithm: algorithm, expiresIn: expiration});
+    return jwt.sign({username: user.username, scope: scopes}, secret, {algorithm: algorithm, expiresIn: expiration});
 };

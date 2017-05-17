@@ -11,7 +11,7 @@ class DBStore {
             const query = !id ? [] : [id];
             store.get(query, (err, data) => {
                 if (err) {
-                    return reject(new Error('GameId not stored in database'));
+                    return reject(new Error('Key not found in database'));
                 }
                 return resolve(Object.keys(data).map(k => data[k]));
             });
@@ -26,7 +26,7 @@ class DBStore {
         return new Promise((resolve, reject) => {
             store.put([id], obj, (err, data) => {
                 if (err) {
-                    return reject(new Error('Unable to store game in database.'));
+                    return reject(new Error('Unable to store object in database.'));
                 }
                 return resolve(data);
             });

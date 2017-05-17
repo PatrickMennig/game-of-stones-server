@@ -31,7 +31,7 @@ exports.register = (server, options, next) => {
                 .create(groupId).then(msg => {
                     return reply({
                         gameId: msg.id
-                    }).status(201);
+                    }).code(201);
                 })
                 .catch((err) =>{
                     return reply(err);
