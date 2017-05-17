@@ -15,8 +15,8 @@ const server = new Hapi.Server({
 
 
 server.connection({
-    port: 3000,
-    host: 'localhost'
+    port: 3001,
+    host: 'game-of-stones.de'
 });
 
 
@@ -31,7 +31,7 @@ server.register(
     {
         register: Authentication,
         options: {
-            secret: 'verycoolsecret'
+            secret: '2ihjsdiohj0i8907q34hjknxycjuugh789924jsh'
         }
     },
     onRegister
