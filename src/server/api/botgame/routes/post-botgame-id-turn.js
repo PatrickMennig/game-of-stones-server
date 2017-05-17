@@ -43,7 +43,7 @@ exports.register = (server, options, next) => {
                         timeStarted: payload.timeStarted,
                         timeLastTurnPlayed: payload.timeLastTurnPlayed,
                         turnsTaken: payload.turnsTaken
-                    });
+                    }).status(201);
                 }).catch(err => {
                     return reply(err);
                 });

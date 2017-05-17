@@ -22,9 +22,9 @@ exports.getUser = (id, callback) => {
 };
 
 
-exports.validatePassword = (id, password, callback) => {
+exports.validatePassword = (username, password, callback) => {
 
-    db.get(id, (err, user) => {
+    db.get(username, (err, user) => {
 
         if (err && err.name !== 'NotFoundError') {
             return callback(err);
@@ -45,4 +45,23 @@ exports.validatePassword = (id, password, callback) => {
         delete user.password;
         return callback(null, user);
     });
+};
+
+
+exports.changePassword = (username, newPassword, callback) => {
+
+    db.get(username, (err, user) => {
+
+        if (err) {
+            return callback(err);
+        }
+
+        user = JSON.parse(user);
+
+        db.put(user.username, JSON.stringify({id: user.id, username: user.username, password: bcyrpt.hashSync(newPassword, 10)}));
+
+        delete user.password;
+        return callback(null, user);
+    });
+
 };

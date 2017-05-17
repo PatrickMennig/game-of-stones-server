@@ -1,5 +1,6 @@
 const signin  = require('./routes/signin');
 const signout = require('./routes/signout');
+const update  = require('./routes/updateCredentials');
 
 const validateSession     = require('./utils/validateSession');
 const validateCredentials = require('./utils/validateCredentials');
@@ -50,6 +51,12 @@ exports.register = (server, options, next) => {
         });
 
         server.register(signout, err => {
+            if (err) {
+                throw err;
+            }
+        });
+
+        server.register(update, err => {
             if (err) {
                 throw err;
             }
