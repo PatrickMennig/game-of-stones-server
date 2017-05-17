@@ -27,7 +27,7 @@ exports.register = (server, options, next) => {
         },
         handler: (request, reply) => {
 
-            const groupId = request.auth.credentials.name;
+            const groupId = request.auth.credentials.username;
             const gameId = request.params.gameId;
             const turn = request.payload;
 
@@ -43,7 +43,7 @@ exports.register = (server, options, next) => {
                         timeStarted: payload.timeStarted,
                         timeLastTurnPlayed: payload.timeLastTurnPlayed,
                         turnsTaken: payload.turnsTaken
-                    }).status(201);
+                    }).code(201);
                 }).catch(err => {
                     return reply(err);
                 });

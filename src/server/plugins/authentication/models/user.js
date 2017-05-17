@@ -4,8 +4,20 @@ const bcyrpt = require('bcrypt');
 const db      = level('./level/users');
 
 
-// TODO only for testing, always creates root account
-db.put('root', JSON.stringify({id: 0, username: 'root', password: bcyrpt.hashSync('root', 10)}));
+
+exports.createDefaultUsers = (users) => {
+    users.forEach(u => {
+        if(!u.username || !u.password) {
+            throw new Error('Error when creating default users on startup. Missing key or value.');
+        }
+        db.put(u.username, JSON.stringify({
+            username: u.username,
+            password: bcyrpt.hashSync(u.password, 10),
+            admin: u.admin || false
+        }));
+    })
+};
+
 
 
 exports.getUser = (id, callback) => {

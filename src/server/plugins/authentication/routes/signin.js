@@ -15,7 +15,7 @@ exports.register = (server, options, next) => {
         handler: (request, reply) => {
             const user  = request.auth.credentials.user;
             const token = createToken(user);
-            session.putSession(user.id, token, (err, session) => {
+            session.putSession(user.username, token, (err, session) => {
                 if(err) {
                     throw err;
                 }

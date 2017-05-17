@@ -27,7 +27,7 @@ exports.register = (server, options, next) => {
         },
         handler: (request, reply) => {
 
-            const groupId = request.auth.credentials.name;
+            const groupId = request.auth.credentials.username;
             const gameId = request.params.gameId;
 
             botgame

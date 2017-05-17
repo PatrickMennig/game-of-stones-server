@@ -1,6 +1,7 @@
 const signin  = require('./routes/signin');
 const signout = require('./routes/signout');
 const update  = require('./routes/updateCredentials');
+const user    = require('./models/user');
 
 const validateSession     = require('./utils/validateSession');
 const validateCredentials = require('./utils/validateCredentials');
@@ -15,6 +16,13 @@ exports.register = (server, options, next) => {
 
     if (!options.hasOwnProperty('secret')) {
         throw new Error('Secret has to be passed to authentication plugin.');
+    }
+
+    if (options.hasOwnProperty('defaultUsers') && options.defaultUsers !== false) {
+        require('fs').readFile(options.defaultUsers, (err, data) => {
+            const users = JSON.parse(data);
+            user.createDefaultUsers(users);
+        });
     }
 
     createToken.init(options.secret, ALGORITHM, EXPIRATION);
