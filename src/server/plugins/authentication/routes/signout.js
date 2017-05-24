@@ -15,7 +15,7 @@ exports.register = (server, options, next) => {
             const decoded  = request.auth.credentials;
             invalidateSession(decoded, (err) => {
                 if(err) {
-                    throw err;
+                    return reply(err);
                 }
                 return reply('Successfully logged out').code(200);
             });
