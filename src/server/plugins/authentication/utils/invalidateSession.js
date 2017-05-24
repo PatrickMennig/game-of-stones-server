@@ -2,7 +2,7 @@ const sessions = require('../models/session');
 
 
 module.exports = (decoded, callback) => {
-    sessions.delSession(decoded.id, (err, session) => {
+    sessions.delSession(decoded.username, (err, session) => {
         if(err) {
             return callback(err, false);
         }
