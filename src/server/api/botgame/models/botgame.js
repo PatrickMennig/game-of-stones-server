@@ -8,7 +8,7 @@ const dbStore  = new DBStore();
 
 
 exports.getAllFinished = () => {
-    return Promise.resolve().then(() => dbStore.getAll());
+    return dbStore.getAll();
 };
 
 
@@ -111,12 +111,15 @@ exports.move = (gameId, groupId, turn) => {
 
 
 const finish = (id, game) => {
-    dbStore.put(id, game).then(game => {
-        console.log('[Server Botgame]   Saved botgame to database.');
-    }).catch(err => {
-        console.error('[Server Botgame]   Error saving botgame to database.');
-        console.error(err);
-    });
+    dbStore.put(id, game.getStatusMessage())
+        .then(msg => {
+            console.log('[Server Botgame]   Saved botgame to database.');
+        })
+        .then(() => memStore.del(id))
+        .catch(err => {
+            console.error('[Server Botgame]   Error saving botgame to database.');
+            console.error(err);
+        });
 };
 
 const isBot = (playerId) => playerId.match("^bot_");
