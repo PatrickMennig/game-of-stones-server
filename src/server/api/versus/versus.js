@@ -9,13 +9,13 @@ exports.register = (server, options, next) => {
 
     server.dependency(options.dependencies, (server, next) => {
 
-        server.register({register: require('./routes/get-botgames'), options: options}, onRegister);
+        server.register({register: require('./routes/get-versus'), options: options}, onRegister);
 
-        server.register({register: require('./routes/post-botgame'), options: options}, onRegister);
+        server.register({register: require('./routes/post-versus'), options: options}, onRegister);
 
-        server.register({register: require('./routes/post-botgame-id'), options: options}, onRegister);
+        server.register({register: require('./routes/post-versus-id'), options: options}, onRegister);
 
-        server.register({register: require('./routes/post-botgame-id-turn'), options: options}, onRegister);
+        server.register({register: require('./routes/post-versus-id-turn'), options: options}, onRegister);
 
         next();
     });

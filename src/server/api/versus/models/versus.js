@@ -23,8 +23,7 @@ exports.create = (groupId) => {
         let msg;
 
         try {
-            // TODO: versus game
-            msg = Api.botGame(groupId);
+            msg = Api.versusGame(groupId);
         } catch (e) {
             return reject(Boom.create(400, e.message));
         }
@@ -40,7 +39,6 @@ exports.create = (groupId) => {
                 reject(Boom.create(400, err.message));
             });
     });
-
 };
 
 
