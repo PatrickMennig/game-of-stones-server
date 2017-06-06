@@ -35,7 +35,7 @@ class Api {
         return {
             id: game.getId(),
             game: game,
-            payload: null
+            payload: game.getStatusMessage()
         }
     }
 
@@ -75,6 +75,10 @@ class Api {
 
     static isRunning(state) {
         return state === enumGameStates.STATE_RUNNING;
+    }
+
+    static isReady(state) {
+        return state === enumGameStates.STATE_READY;
     }
 
     static isError(state) {

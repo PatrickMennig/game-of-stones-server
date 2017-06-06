@@ -43,8 +43,7 @@ exports.create = (groupId) => {
 
 
 exports.join = (gameId, groupId) => {
-    // TODO: rework for versus
-    /*
+
     return new Promise((resolve, reject) => {
         memStore
             .get(gameId)
@@ -55,26 +54,15 @@ exports.join = (gameId, groupId) => {
                 return reject(Boom.create(400, err.message));
             });
     });
-    */
 };
 
 
 exports.start = (gameId) => {
-    // TODO: rework for versus
-    /*
     return new Promise((resolve, reject) => {
         memStore
             .get(gameId)
             .then(game => {
                 return Api.startGame(game)
-            })
-            .then(msg => {
-
-                if (isBot(msg.payload.activePlayer)) {
-                    return moveBot(msg.game);
-                }
-
-                return msg;
             })
             .then(msg => {
                 return resolve(msg);
@@ -83,25 +71,16 @@ exports.start = (gameId) => {
                 return reject(Boom.create(400, err.message));
             });
     });
-    */
 };
 
 
 exports.move = (gameId, groupId, turn) => {
-    // TODO: rework for versus
-    /*
+
     return new Promise((resolve, reject) => {
         memStore
             .get(gameId)
             .then(game => {
                 return Api.resolveMove(game, groupId, turn);
-            })
-            .then(msg => {
-                if (isBot(msg.payload.activePlayer)) {
-                    return moveBot(msg.game);
-                }
-
-                return msg;
             })
             .then(msg => {
                 if(true !== Api.isRunning(msg.payload.state)) {
@@ -114,21 +93,22 @@ exports.move = (gameId, groupId, turn) => {
                 return reject(Boom.create(400, err.message));
             });
     });
-    */
+
 };
+
+exports.isReady = (state) => Api.isReady(state);
 
 
 const finish = (id, game) => {
-    // TODO: rework for versus
-    /*
+
     dbStore.put(id, game.getStatusMessage())
         .then(msg => {
-            console.log('[Server Botgame]   Saved botgame to database.');
+            console.log('[Server Versus]   Saved versus game to database.');
         })
         .then(() => memStore.del(id))
         .catch(err => {
-            console.error('[Server Botgame]   Error saving botgame to database.');
+            console.error('[Server Versus]   Error saving versus game to database.');
             console.error(err);
         });
-    */
+
 };

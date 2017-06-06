@@ -64,6 +64,23 @@ function setup () {
     );
 
 
+    server.register(
+        {
+            register: require('./api/versus/versus'),
+            options: {
+                auth: Authentication.strategy,
+                dependencies: ['jwt-auth']
+            }
+        },
+        {
+            routes: {
+                prefix: '/versus'
+            }
+        },
+        onRegister
+    );
+
+
     server.register(Docs, onRegister);
 
 

@@ -1,5 +1,5 @@
 const schemaCreateResponse = require('../schemas/createResponse');
-const versus               = require('../models/botgame');
+const versus               = require('../models/versus');
 
 
 exports.register = (server, options, next) => {
