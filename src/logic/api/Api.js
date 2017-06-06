@@ -19,6 +19,15 @@ class Api {
         };
     }
 
+    static versusGame(playerId) {
+        const g = gameFactory.createGame();
+        return {
+            id: g.getId(),
+            game: g,
+            payload: null
+        }
+    }
+
     static joinGame(game, playerId) {
 
         game.addPlayer(playerFactory.createHumanPlayer(playerId));
@@ -41,11 +50,11 @@ class Api {
         }
     }
 
-    static resolveMove(game, groupId, turn = null) {
+    static resolveMove(game, playerId, turn = null) {
 
         const player = game.getActivePlayer();
 
-        if (player.getPlayerId() !== groupId) {
+        if (player.getPlayerId() !== playerId) {
             throw new Error('Player trying to send move is not the active player.')
         }
 

@@ -16,7 +16,7 @@ exports.register = (server, options, next) => {
                 'You can only play a turn in a botgame that was previously joined by your group.',
                 'Playing turns in botgames when you are not the active player is impossible.',
                 'Supplying an invalid turn will result in a loss for your group.',
-                'You will need to authenticate against the server to join a botgame.'
+                'You will need to authenticate against the server to play a turn.'
             ],
             validate: {
                 payload: schemaTurn
