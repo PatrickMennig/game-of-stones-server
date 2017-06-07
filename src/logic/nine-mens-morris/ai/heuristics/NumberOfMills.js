@@ -3,53 +3,17 @@ const Heuristic = require('./Heuristic');
 
 class NumberOfMills extends Heuristic {
 
-    evaluate(move) {
-        let visitedFieldIds    = {};
-        let ownMills           = 0;
-        const millCombinations = this._millRules.getMillCombinations();
-        let token              = move.getToken();
+    evaluate(board, playerToken, otherPlayerToken) {
 
-        for (let i = 0; i < 24; ++i) {
-            // only look at ids that have not already been evaluated to be in a mill
-            if (visitedFieldIds.hasOwnProperty(i)) {
-                continue;
-            }
-            // check for the id if it is in a mill
-            if (i === move.getToId() && this._millRules.willBeMill(move, this._board)) {
-                ownMills += 1;
-                visitedFieldIds[i] = true;
-                millCombinations[i][0].forEach(index => visitedFieldIds[index] = true);
-                millCombinations[i][1].forEach(index => visitedFieldIds[index] = true);
-                continue;
-            }
+        const results = this.forEachPosition(board, (position, i) => {
 
-            if (this._millRules.isInMill(i, token, this._board)) {
-                ownMills += 1;
-                visitedFieldIds[i] = true;
-                millCombinations[i][0].forEach(index => visitedFieldIds[index] = true);
-                millCombinations[i][1].forEach(index => visitedFieldIds[index] = true);
-            }
-        }
+            const isOwnMill   = this._millRules.isInMill(i, playerToken, board);
+            const isEnemyMill = this._millRules.isInMill(i, otherPlayerToken, board);
 
-        let otherMills  = 0;
-        visitedFieldIds = {};
-        token           = this._otherPlayer.getToken();
+            return isOwnMill ? 0.33333 : isEnemyMill ? -0.33333 : 0;
+        });
 
-        for (let i = 0; i < 24; ++i) {
-            // only look at ids that have not already been evaluated to be in a mill
-            if (visitedFieldIds.hasOwnProperty(i)) {
-                continue;
-            }
-            // check for the id if it is in a mill
-            if (this._millRules.isInMill(i, token, this._board)) {
-                otherMills += 1;
-                visitedFieldIds[i] = true;
-                millCombinations[i][0].forEach(index => visitedFieldIds[index] = true);
-                millCombinations[i][1].forEach(index => visitedFieldIds[index] = true);
-            }
-        }
-
-        return ownMills - otherMills;
+        return Math.round(results.reduce((acc, curr) => acc + curr, 0));
     }
 
 }

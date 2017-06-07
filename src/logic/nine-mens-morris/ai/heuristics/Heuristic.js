@@ -13,15 +13,25 @@
  */
 class Heuristic {
 
-    constructor(board, player, otherPlayer, millRules) {
-        this._board       = board;
-        this._player      = player;
-        this._otherPlayer = otherPlayer;
-        this._millRules   = millRules;
+    constructor(millRules) {
+        this._millRules    = millRules;
+        this._MAX_FIELD_ID = 23;
     }
 
-    evaluate(move, otherPlayer = null) {
+    evaluate(board, playerToken, otherPlayerToken) {
         throw new Error('Evaluate method has to be implemented in subclass.');
+    }
+
+    forEachPosition(board, fn) {
+        const results = [];
+        for (let i = 0; i <= this._MAX_FIELD_ID; ++i) {
+            results.push(fn(board.getPosition(i), i, board));
+        }
+        return results;
+    }
+
+    static createFn() {
+        return (millRules) => new Heuristic(millRules);
     }
 }
 

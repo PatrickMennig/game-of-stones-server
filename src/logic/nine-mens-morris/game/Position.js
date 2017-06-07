@@ -47,15 +47,28 @@ class Position {
         return Object.keys(this._neighbors).map(k => this._neighbors[k]).filter(n => n !== null);
     }
 
+    setTopNeighbor(neighbor) {
+        this._neighbors.top = neighbor;
+    }
+
+    setRightNeighbor(neighbor) {
+        this._neighbors.right = neighbor;
+    }
+
+    setBottomNeighbor(neighbor) {
+        this._neighbors.bottom = neighbor;
+    }
+
+    setLeftNeighbor(neighbor) {
+        this._neighbors.left = neighbor;
+    }
+
+
     getTopNeighbor() {
         if (typeof this._neighbors.top !== 'object') {
             throw new Error(enumPositionErrors.POSITION_NOT_SET);
         }
         return this._neighbors.top;
-    }
-
-    setTopNeighbor(neighbor) {
-        this._neighbors.top = neighbor;
     }
 
     getRightNeighbor() {
@@ -65,19 +78,11 @@ class Position {
         return this._neighbors.right;
     }
 
-    setRightNeighbor(neighbor) {
-        this._neighbors.right = neighbor;
-    }
-
     getBottomNeighbor() {
         if (typeof this._neighbors.bottom !== 'object') {
             throw new Error(enumPositionErrors.POSITION_NOT_SET);
         }
         return this._neighbors.bottom;
-    }
-
-    setBottomNeighbor(neighbor) {
-        this._neighbors.bottom = neighbor;
     }
 
     getLeftNeighbor() {
@@ -87,9 +92,6 @@ class Position {
         return this._neighbors.left;
     }
 
-    setLeftNeighbor(neighbor) {
-        this._neighbors.left = neighbor;
-    }
 
     isNeighborOf(otherPosition) {
         const neighbors  = Object.keys(this._neighbors).map(k => this._neighbors[k]);

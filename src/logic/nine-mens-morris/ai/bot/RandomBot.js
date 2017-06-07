@@ -38,7 +38,7 @@ class RandomBot extends Player {
 
         do {
             tries++;
-            const toId = this._randomWithChance(1);
+            const toId = RandomBot._randomWithChance(1);
             move = moveFactory.createMove(this.getToken(), toId);
             const willBeMill = Rules.willBeMill(move, board);
 
@@ -64,7 +64,7 @@ class RandomBot extends Player {
 
         do {
             tries++;
-            const fromId = this._randomWithChance(1);
+            const fromId = RandomBot._randomWithChance(1);
 
             if(!board.getPosition(fromId).isOwnToken(this.getToken())) {
                 continue;
@@ -76,14 +76,14 @@ class RandomBot extends Player {
                 continue;
             }
 
-            const toId = toIds[this._randomUpExcl(toIds.length)].getId();
+            const toId = toIds[RandomBot._randomUpExcl(toIds.length)].getId();
 
             move = moveFactory.createMove(this.getToken(), toId, fromId);
             const willBeMill = Rules.willBeMill(move, board);
 
             for(let runs = 0; willBeMill && runs < 50; ++runs) {
 
-                const removeId = this._randomWithChance(1);
+                const removeId = RandomBot._randomWithChance(1);
                 move = moveFactory.createMove(this.getToken(), toId, fromId, removeId);
 
                 const isValid = Rules.isValid(move, board, this, otherPlayer).isValid;
@@ -103,8 +103,8 @@ class RandomBot extends Player {
 
         do {
             tries++;
-            const toId = this._randomWithChance(1);
-            const fromId = this._randomWithChance(1);
+            const toId = RandomBot._randomWithChance(1);
+            const fromId = RandomBot._randomWithChance(1);
             move = moveFactory.createMove(this.getToken(), toId, fromId);
             const willBeMill = Rules.willBeMill(move, board);
 
@@ -124,8 +124,12 @@ class RandomBot extends Player {
     }
 
 
+    static create() {
+        return new RandomBot(Player.nextBotPlayerId(), Player.playerTypeBot());
+    }
 
-    _randomWithChance(chance) {
+
+    static _randomWithChance(chance) {
         const res = Math.random();
         if (res < chance) {
             return Math.floor(Math.random() * 23);
@@ -133,12 +137,9 @@ class RandomBot extends Player {
         return null;
     }
 
-    _randomUpExcl(max) {
+    static _randomUpExcl(max) {
         return Math.floor(Math.random() * max);
     }
 }
 
-exports.createRandomBot = () => {
-    const dummy = playerFactory.createBotPlayer();
-    return new RandomBot(dummy.getPlayerId(), dummy.getType());
-};
+module.exports = RandomBot;

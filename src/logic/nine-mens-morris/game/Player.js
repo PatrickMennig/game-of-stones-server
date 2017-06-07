@@ -88,6 +88,18 @@ class Player {
         this._nextMove = move;
     }
 
+
+    static nextPlayerId() {
+        return idGenerator.nextId(8);
+    }
+
+    static nextBotPlayerId() {
+        return `bot_${Player.nextPlayerId()}`
+    }
+
+    static playerTypeBot() {
+        return enumPlayerTypes.BOT;
+    }
 }
 
 exports.Player = Player;
