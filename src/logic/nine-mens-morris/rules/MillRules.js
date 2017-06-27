@@ -32,8 +32,8 @@ class MillRules {
         const mills = millCombinations[move.getToId()];
 
         const fromId = move.getFromId();
-        const isFromInMill0 = fromId ? mills[0].filter(p => p === fromId).length > 0 : false;
-        const isFromInMill1 = fromId ? mills[1].filter(p => p === fromId).length > 0 : false;
+        const isFromInMill0 = typeof fromId === 'number' ? mills[0].filter(p => p === fromId).length > 0 : false;
+        const isFromInMill1 = typeof fromId === 'number' ?  mills[1].filter(p => p === fromId).length > 0 : false;
 
         return !isFromInMill0 && isMill(move.getToken(), positionsForMill(mills[0], board))
             || !isFromInMill1 && isMill(move.getToken(), positionsForMill(mills[1], board));
