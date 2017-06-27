@@ -49,7 +49,6 @@ describe('Rules', function () {
             const res = Rules.isValid(m, b, p1, p2);
 
             assert.equal(res.isValid, true);
-
         });
 
         it('should be a valid move, not a winning one, closing a mill');
