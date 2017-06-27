@@ -1,6 +1,7 @@
-const enumPlayerTypes    = require('./enum/enumPlayerTypes');
-const enumPlayerErrors   = require('./errors/enumPlayerErrors');
-const idGenerator        = require('./idGenerator');
+const enumPlayerTypes  = require('./enum/enumPlayerTypes');
+const enumPlayerErrors = require('./errors/enumPlayerErrors');
+const idGenerator      = require('./idGenerator');
+const Phase            = require('./Phase');
 
 
 class Player {
@@ -88,6 +89,9 @@ class Player {
         this._nextMove = move;
     }
 
+    getPhase() {
+        return Phase.create(this).getPhase();
+    }
 
     static nextPlayerId() {
         return idGenerator.nextId(8);
@@ -102,7 +106,7 @@ class Player {
     }
 }
 
-exports.Player = Player;
+exports.Player            = Player;
 exports.createPlayer      = (playerId, type) => new Player(playerId, type);
 exports.createHumanPlayer = (playerId) => new Player(playerId, enumPlayerTypes.HUMAN);
 exports.createBotPlayer   = () => new Player(`bot_${idGenerator.nextId(8)}`, enumPlayerTypes.BOT);

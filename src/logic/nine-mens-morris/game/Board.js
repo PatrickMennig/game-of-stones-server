@@ -1,6 +1,5 @@
 const positionFactory = require('./Position');
-
-const hash = require('object-hash');
+const hash            = require('object-hash');
 
 
 class Board {
@@ -33,16 +32,24 @@ class Board {
     isAdjacent(posOne, posTwo) {
         return this.getPosition(posOne).isNeighborOf(this.getPosition(posTwo));
     }
+
+    getChildStates(activePlayer) {
+        //TODO implement
+        // child states have to be copies of the board
+    }
+
+    hasChildStates() {
+        //TODO implement
+    }
 }
 
 
-exports.createBoard = () => new Board();
+exports.createBoard            = () => new Board();
 exports.createBoardWithPattern = (pattern) => {
     const board = new Board();
     pattern.forEach(p => board.resolve(p.token, p.id));
     return board;
 };
-
 
 
 const setupBoard = () => {

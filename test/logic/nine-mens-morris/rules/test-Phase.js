@@ -1,5 +1,5 @@
 const assert        = require('assert');
-const phaseFactory  = require('../../../../src/logic/nine-mens-morris/rules/Phase');
+const Phase         = require('../../../../src/logic/nine-mens-morris/game/Phase');
 const playerFactory = require('../../../../src/logic/nine-mens-morris/game/Player');
 
 
@@ -14,7 +14,7 @@ describe('Phase', function () {
                 p.placedToken();
             }
 
-            const phase = phaseFactory.createPhase(p);
+            const phase     = Phase.create(p);
             const phaseName = phase.getPhase();
 
             assert.equal(phaseName, phase.phases().PHASE_1_PLACING);
@@ -24,7 +24,7 @@ describe('Phase', function () {
         it('should return the correct phase one for a player in placing phase', function () {
             const p = playerFactory.createBotPlayer();
 
-            const phase = phaseFactory.createPhase(p);
+            const phase     = Phase.create(p);
             const phaseName = phase.getPhase();
 
             assert.equal(phaseName, phase.phases().PHASE_1_PLACING);
@@ -39,7 +39,7 @@ describe('Phase', function () {
                 p.lostToken();
             }
 
-            const phase = phaseFactory.createPhase(p);
+            const phase     = Phase.create(p);
             const phaseName = phase.getPhase();
 
             assert.equal(phaseName, phase.phases().PHASE_1_PLACING);
@@ -53,7 +53,7 @@ describe('Phase', function () {
                 p.placedToken();
             }
 
-            const phase = phaseFactory.createPhase(p);
+            const phase     = Phase.create(p);
             const phaseName = phase.getPhase();
 
             assert.equal(phaseName, phase.phases().PHASE_2_MOVING);
@@ -72,7 +72,7 @@ describe('Phase', function () {
             }
 
 
-            const phase = phaseFactory.createPhase(p);
+            const phase     = Phase.create(p);
             const phaseName = phase.getPhase();
 
             assert.equal(phaseName, phase.phases().PHASE_2_MOVING);
@@ -90,7 +90,7 @@ describe('Phase', function () {
                 p.lostToken();
             }
 
-            const phase = phaseFactory.createPhase(p);
+            const phase     = Phase.create(p);
             const phaseName = phase.getPhase();
 
             assert.equal(phaseName, phase.phases().PHASE_3_FLYING);

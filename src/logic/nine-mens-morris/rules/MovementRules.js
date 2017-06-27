@@ -1,4 +1,4 @@
-const phaseFactory                   = require('./Phase');
+const Phase                          = require('./../game/Phase');
 const movementRulesStrategiesFactory = require('./MovementRulesStrategies');
 
 const strategies = {};
@@ -23,7 +23,7 @@ class MovementRules {
         //}
 
         // check if the player is moving by an allowed range for the phase he is in
-        const strategy = strategyForPhase(phaseFactory.createPhase(player));
+        const strategy = strategyForPhase(Phase.create(player));
         return strategy.isValidMove(move, player, board);
     }
 }
