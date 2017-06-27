@@ -3,13 +3,10 @@ const Heuristic = require('./Heuristic');
 
 class NumberOfTokens extends Heuristic {
 
-    evaluate(move) {
-
-        const willBeMill = this._millRules.willBeMill(move, this._board);
-
-        const add = willBeMill ? 1 : 0;
-
-        return this._player.getNumTokensTotal() - this._otherPlayer.getNumTokensTotal() + add;
+    evaluate(board, playerToken, otherPlayerToken) {
+        return this
+            .forEachPosition(board, position => position.isOwnToken(playerToken) ? 1 : position.isEnemyToken(playerToken) ? -1 : 0)
+            .reduce((acc, curr) => acc + curr, 0);
     }
 }
 

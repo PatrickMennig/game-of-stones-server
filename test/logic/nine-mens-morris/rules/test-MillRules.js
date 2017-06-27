@@ -73,6 +73,30 @@ describe('MillRules', function () {
             assert.equal(willBeMill, false);
         });
 
+        it('should return false for a token that will move within a mill (slack test case)', function () {
+            const b = boardFactory.createBoardWithPattern([
+                {token: PLAYER_ONE_TOKEN, id: 0},
+                {token: PLAYER_ONE_TOKEN, id: 1},
+                {token: PLAYER_ONE_TOKEN, id: 3},
+                {token: PLAYER_ONE_TOKEN, id: 4},
+                {token: PLAYER_ONE_TOKEN, id: 10},
+                {token: PLAYER_ONE_TOKEN, id: 21},
+                {token: PLAYER_ONE_TOKEN, id: 23},
+
+                {token: PLAYER_TWO_TOKEN, id: 2},
+                {token: PLAYER_TWO_TOKEN, id: 6},
+                {token: PLAYER_TWO_TOKEN, id: 7},
+                {token: PLAYER_TWO_TOKEN, id: 11},
+                {token: PLAYER_TWO_TOKEN, id: 12},
+                {token: PLAYER_TWO_TOKEN, id: 14},
+                {token: PLAYER_TWO_TOKEN, id: 15},
+                {token: PLAYER_TWO_TOKEN, id: 19}
+            ]);
+            const m          = moveFactory.createMove(PLAYER_ONE_TOKEN, 9, 0);
+            const willBeMill = MillRules.willBeMill(m, b);
+            assert.equal(willBeMill, false);
+        });
+
         it('should return false for a different players token that will not be in a mill', function () {
             const b          = boardFactory.createBoardWithPattern(
                 [

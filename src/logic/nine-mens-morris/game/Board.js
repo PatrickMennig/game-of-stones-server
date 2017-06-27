@@ -1,6 +1,5 @@
 const positionFactory = require('./Position');
-
-const hash = require('object-hash');
+const hash            = require('object-hash');
 
 
 class Board {
@@ -14,32 +13,10 @@ class Board {
     }
 
     getState() {
-        /*
-        const positions = [...this._board].map((iter) => iter[1]);
-        const tokens = positions.map(p => p.getToken());
-        return tokens;
-        */
         return this._board.map(p => p.getToken());
     }
 
     resolve(token, toId, fromId, removeId) {
-
-        /*
-        const copy = this.getState();
-        let from = token;
-        if(fromId !== false) {
-            from = copy[fromId];
-            copy[fromId] = 'NO_TOKEN';
-        }
-        copy[toId] = from;
-        if(removeId !== false) {
-            copy[removeId] = 'NO_TOKEN';
-        }
-
-        if(hash(copy) !== hash(this.getState())) {
-            throw new Error('Diff')
-        }
-        */
 
         this.getPosition(toId).setToken(token);
 
@@ -50,16 +27,24 @@ class Board {
         if (typeof removeId === 'number') {
             this.getPosition(removeId).setTokenEmpty();
         }
-
     }
 
     isAdjacent(posOne, posTwo) {
         return this.getPosition(posOne).isNeighborOf(this.getPosition(posTwo));
     }
+
+    getChildStates(activePlayer) {
+        //TODO implement
+        // child states have to be copies of the board
+    }
+
+    hasChildStates() {
+        //TODO implement
+    }
 }
 
 
-exports.createBoard = () => new Board();
+exports.createBoard            = () => new Board();
 exports.createBoardWithPattern = (pattern) => {
     const board = new Board();
     pattern.forEach(p => board.resolve(p.token, p.id));
@@ -67,19 +52,16 @@ exports.createBoardWithPattern = (pattern) => {
 };
 
 
-
 const setupBoard = () => {
 
     const board = emptyBoard();
 
     for (let i = 0; i <= 21; i += 3) {
-
         // horizontal connections
         board[i].setRightNeighbor(board[i + 1]);
         board[i + 1].setRightNeighbor(board[i + 2]);
         board[i + 2].setLeftNeighbor(board[i + 1]);
         board[i + 1].setLeftNeighbor(board[i]);
-
     }
 
     setNeighboredVertical(board, 0, 9);

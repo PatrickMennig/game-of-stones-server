@@ -17,7 +17,7 @@ describe('idGenerator', function () {
         });
 
         it('should return 2.500.000 unique ids', function (done) {
-            this.timeout(5000);
+            this.timeout(10000);
             const ids = new Set();
             for(let i = 0; i < 2500000; i++) {
                 let id = idGenerator.nextId();

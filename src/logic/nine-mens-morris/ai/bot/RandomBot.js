@@ -1,9 +1,7 @@
-const playerFactory = require('../../game/Player');
-const Player        = require('../../game/Player').Player;
-const moveFactory   = require('../../game/Move');
-const Rules         = require('../../rules/Rules');
-const phaseFactory  = require('../../rules/Phase');
-const enumPhases = require('../../rules/enum/enumPhases');
+const Player      = require('../../game/Player').Player;
+const moveFactory = require('../../game/Move');
+const Rules       = require('../../rules/Rules');
+const enumPhases  = require('../../game/enum/enumPhases');
 
 
 const MAX_TRIES = 10000;
@@ -17,12 +15,9 @@ class RandomBot extends Player {
         return super.getNextMove();
     }
 
-    _phase() {
-        return phaseFactory.createPhase(this).getPhase();
-    }
-
     _randomMove(board, otherPlayer) {
-        switch (this._phase()) {
+        const p = this.getPhase();
+        switch (p) {
             case enumPhases.PHASE_1_PLACING:
                 return this._placingMove(board, otherPlayer);
             case enumPhases.PHASE_2_MOVING:
@@ -38,17 +33,17 @@ class RandomBot extends Player {
 
         do {
             tries++;
-            const toId = this._randomWithChance(1);
-            move = moveFactory.createMove(this.getToken(), toId);
+            const toId       = RandomBot._randomWithChance(1);
+            move             = moveFactory.createMove(this.getToken(), toId);
             const willBeMill = Rules.willBeMill(move, board);
 
-            if(willBeMill) {
+            if (willBeMill) {
 
-                for(let i = 0; i < 24; ++i) {
-                    move = moveFactory.createMove(this.getToken(), toId, null, i);
+                for (let i = 0; i < 24; ++i) {
+                    move          = moveFactory.createMove(this.getToken(), toId, null, i);
                     const isValid = Rules.isValid(move, board, this, otherPlayer).isValid;
 
-                    if(isValid) {
+                    if (isValid) {
                         return move;
                     }
                 }
@@ -64,31 +59,31 @@ class RandomBot extends Player {
 
         do {
             tries++;
-            const fromId = this._randomWithChance(1);
+            const fromId = RandomBot._randomWithChance(1);
 
-            if(!board.getPosition(fromId).isOwnToken(this.getToken())) {
+            if (!board.getPosition(fromId).isOwnToken(this.getToken())) {
                 continue;
             }
 
             const toIds = board.getPosition(fromId).getNeighbors().filter(n => n.isEmpty());
 
-            if(toIds.length === 0) {
+            if (toIds.length === 0) {
                 continue;
             }
 
-            const toId = toIds[this._randomUpExcl(toIds.length)].getId();
+            const toId = toIds[RandomBot._randomUpExcl(toIds.length)].getId();
 
-            move = moveFactory.createMove(this.getToken(), toId, fromId);
+            move             = moveFactory.createMove(this.getToken(), toId, fromId);
             const willBeMill = Rules.willBeMill(move, board);
 
-            for(let runs = 0; willBeMill && runs < 50; ++runs) {
+            for (let runs = 0; willBeMill && runs < 50; ++runs) {
 
-                const removeId = this._randomWithChance(1);
-                move = moveFactory.createMove(this.getToken(), toId, fromId, removeId);
+                const removeId = RandomBot._randomWithChance(1);
+                move           = moveFactory.createMove(this.getToken(), toId, fromId, removeId);
 
                 const isValid = Rules.isValid(move, board, this, otherPlayer).isValid;
 
-                if(isValid) {
+                if (isValid) {
                     return move;
                 }
             }
@@ -103,29 +98,33 @@ class RandomBot extends Player {
 
         do {
             tries++;
-            const toId = this._randomWithChance(1);
-            const fromId = this._randomWithChance(1);
-            move = moveFactory.createMove(this.getToken(), toId, fromId);
+            const toId       = RandomBot._randomWithChance(1);
+            const fromId     = RandomBot._randomWithChance(1);
+            move             = moveFactory.createMove(this.getToken(), toId, fromId);
             const willBeMill = Rules.willBeMill(move, board);
 
-            if(willBeMill) {
-                for(let i = 0; i < 24; ++i) {
-                    move = moveFactory.createMove(this.getToken(), toId, fromId, i);
+            if (willBeMill) {
+                for (let i = 0; i < 24; ++i) {
+                    move          = moveFactory.createMove(this.getToken(), toId, fromId, i);
                     const isValid = Rules.isValid(move, board, this, otherPlayer).isValid;
 
-                    if(isValid) {
+                    if (isValid) {
                         return move;
                     }
                 }
             }
-        } while ((!move ||  true !== Rules.isValid(move, board, this, otherPlayer).isValid) && tries < MAX_TRIES);
+        } while ((!move || true !== Rules.isValid(move, board, this, otherPlayer).isValid) && tries < MAX_TRIES);
 
         return move;
     }
 
 
+    static create() {
+        return new RandomBot(Player.nextBotPlayerId(), Player.playerTypeBot());
+    }
 
-    _randomWithChance(chance) {
+
+    static _randomWithChance(chance) {
         const res = Math.random();
         if (res < chance) {
             return Math.floor(Math.random() * 23);
@@ -133,12 +132,9 @@ class RandomBot extends Player {
         return null;
     }
 
-    _randomUpExcl(max) {
+    static _randomUpExcl(max) {
         return Math.floor(Math.random() * max);
     }
 }
 
-exports.createRandomBot = () => {
-    const dummy = playerFactory.createBotPlayer();
-    return new RandomBot(dummy.getPlayerId(), dummy.getType());
-};
+module.exports = RandomBot;

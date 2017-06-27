@@ -1,6 +1,11 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Example user template template
-### Example user template
+# database files
+level/botgames/*
+level/sessions/*
+level/users/*
+!level/botgames/*.md
+!level/sessions/*.md
+!level/users/*.md
+
 
 # IntelliJ project files
 .idea

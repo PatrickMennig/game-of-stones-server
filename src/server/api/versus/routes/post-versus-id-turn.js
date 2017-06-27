@@ -1,7 +1,8 @@
 const schemaTurn         = require('../schemas/turn');
 const schemaTurnResponse = require('../schemas/turnResponse');
 const Boom               = require('boom');
-const botgame            = require('../models/botgame');
+const versus             = require('../models/versus');
+const events             = require('../utils/events');
 
 
 exports.register = (server, options, next) => {
@@ -13,8 +14,8 @@ exports.register = (server, options, next) => {
             auth: options.auth,
             description: 'Play a turn in a botgame',
             notes: [
-                'You can only play a turn in a botgame that was previously joined by your group.',
-                'Playing turns in botgames when you are not the active player is impossible.',
+                'You can only play a turn in a versus game that was previously joined by your group.',
+                'Playing turns in versu games when you are not the active player is impossible.',
                 'Supplying an invalid turn will result in a loss for your group.',
                 'You will need to authenticate against the server to play a turn.'
             ],
@@ -28,13 +29,23 @@ exports.register = (server, options, next) => {
         handler: (request, reply) => {
 
             const groupId = request.auth.credentials.username;
-            const gameId = request.params.gameId;
-            const turn = request.payload;
+            const gameId  = request.params.gameId;
+            const turn    = request.payload;
 
-            botgame
+            versus
                 .move(gameId, groupId, turn)
                 .then(msg => {
-                    const { id, game, payload } = msg;
+
+                    return new Promise((resolve, reject) => {
+                        events.bus().emit(events.eventName(gameId, events.eventTypes.turn), msg);
+
+                        events.bus().once(events.eventName(gameId, events.eventTypes.waitForTurn), (msg) => {
+                            resolve(msg);
+                        });
+                    });
+                })
+                .then(msg => {
+                    const {id, game, payload} = msg;
                     return reply({
                         gameId: id,
                         activePlayer: payload.activePlayer,
@@ -45,8 +56,8 @@ exports.register = (server, options, next) => {
                         turnsTaken: payload.turnsTaken
                     }).code(201);
                 }).catch(err => {
-                    return reply(err);
-                });
+                return reply(err);
+            });
         }
     });
 
@@ -54,5 +65,5 @@ exports.register = (server, options, next) => {
 };
 
 exports.register.attributes = {
-    name: 'botgame-route-post-botgame-id-turn'
+    name: 'versus-route-post-versus-id-turn'
 };

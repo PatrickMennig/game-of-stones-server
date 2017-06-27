@@ -9,10 +9,49 @@ describe('Rules', function () {
 
     describe('isValidMove', function () {
 
-        it('should be a valid move, not a winning one, not closing a mill');
+        it('should be a valid move, not a winning one, not closing a mill', function () {
+            const p1 = playerFactory.createBotPlayer();
+            const p2 = playerFactory.createBotPlayer();
+
+            const b = boardFactory.createBoardWithPattern([
+                {token: p1.getToken(), id: 0},
+                {token: p1.getToken(), id: 1},
+                {token: p1.getToken(), id: 3},
+                {token: p1.getToken(), id: 4},
+                {token: p1.getToken(), id: 10},
+                {token: p1.getToken(), id: 21},
+                {token: p1.getToken(), id: 23},
+
+                {token: p2.getToken(), id: 2},
+                {token: p2.getToken(), id: 6},
+                {token: p2.getToken(), id: 7},
+                {token: p2.getToken(), id: 11},
+                {token: p2.getToken(), id: 12},
+                {token: p2.getToken(), id: 14},
+                {token: p2.getToken(), id: 15},
+                {token: p2.getToken(), id: 19}
+            ]);
+
+            for(let i = 0; i < 9; ++i) {
+                p1.placedToken();
+                p2.placedToken();
+            }
+
+            for(let i = 0; i < 2; ++i) {
+                p1.lostToken();
+            }
+
+            for(let i = 0; i < 1; ++i) {
+                p2.lostToken();
+            }
+
+            const m = moveFactory.createMove(p1.getToken(), 9, 0);
+            const res = Rules.isValid(m, b, p1, p2);
+
+            assert.equal(res.isValid, true);
+        });
 
         it('should be a valid move, not a winning one, closing a mill');
-
 
         it('should be a valid move, moving, a winning one, closing a mill', function () {
             const p1 = playerFactory.createBotPlayer();

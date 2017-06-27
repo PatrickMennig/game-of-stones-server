@@ -9,7 +9,7 @@ module.exports = {
 
         routeConfig: {
             connections: {
-                compression: true,
+                compression: false,
                 router: {
                     isCaseSensitive: false,
                     stripTrailingSlash: true

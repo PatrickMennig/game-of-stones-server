@@ -3,22 +3,25 @@ const Heuristic = require('./Heuristic');
 
 class NumberOfBlockedPieces extends Heuristic {
 
-    evaluate(move) {
+    evaluate(board, playerToken, otherPlayerToken) {
 
-        const token = this._player.getToken();
+        const result = this.forEachPosition(board, (position) => {
 
-        const neighbors = this._board.getPosition(move.getToId()).getNeighbors();
-        const blockedNeighbors = neighbors.filter(n => {
-            if(n === null) {
-                return false;
+            if (position.isEmpty()) {
+                return 0;
             }
-            return n.isEnemyToken(token)
+
+            const isBlocked = position
+                .getNeighbors()
+                .map(neighbor => neighbor !== null && !neighbor.isEmpty())
+                .reduce((acc, curr) => acc && curr, true);
+
+            return isBlocked ? position.isOwnToken(playerToken) ? -1 : 1 : 0;
         });
 
-        return blockedNeighbors.length;
+        return result.reduce((acc, curr) => acc + curr, 0);
     }
 }
-
 
 module.exports = NumberOfBlockedPieces;
 

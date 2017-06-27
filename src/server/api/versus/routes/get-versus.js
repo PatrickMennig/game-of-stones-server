@@ -1,4 +1,4 @@
-const botgame = require('../models/botgame');
+const versus = require('../models/versus');
 const gamesResponseSchema = require('../schemas/gamesResponse');
 
 
@@ -11,7 +11,7 @@ exports.register = (server, options, next) => {
             auth: false,
             description: 'List of all running botgames',
             notes: [
-                'Use this route to see a list of all currently running botgames.'
+                'Use this route to see a list of all currently running versus games.'
             ],
             response: {
                 schema: gamesResponseSchema
@@ -19,8 +19,8 @@ exports.register = (server, options, next) => {
         },
         handler: (request, reply) => {
 
-            const running = botgame.getAllRunning().then((games = []) => games.map(g => g.getStatusMessage()));
-            const finished = botgame.getAllFinished().then((games = []) => games.map(g => g._meta));
+            const running = versus.getAllRunning().then((games = []) => games.map(g => g.getStatusMessage()));
+            const finished = versus.getAllFinished().then((games = []) => games.map(g => g._meta));
 
             const all = Promise.all([running, finished])
                 .then(games => {
@@ -28,7 +28,6 @@ exports.register = (server, options, next) => {
                 })
                 .then(games => reply(games))
                 .catch(err => reply(err.message).code(500));
-
         }
     });
 
@@ -36,5 +35,5 @@ exports.register = (server, options, next) => {
 };
 
 exports.register.attributes = {
-    name: 'botgame-route-get-botgames'
+    name: 'versus-route-get-versus'
 };
