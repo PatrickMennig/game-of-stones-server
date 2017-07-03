@@ -1,3 +1,4 @@
+const signup  = require('./routes/signup');
 const signin  = require('./routes/signin');
 const signout = require('./routes/signout');
 const update  = require('./routes/updateCredentials');
@@ -50,6 +51,12 @@ exports.register = (server, options, next) => {
 
         server.auth.strategy('basic', 'basic', {
             validateFunc: validateCredentials
+        });
+
+        server.register(signup, err => {
+            if (err) {
+                throw err;
+            }
         });
 
         server.register(signin, err => {

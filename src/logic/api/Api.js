@@ -1,8 +1,8 @@
-const gameFactory      = require('../nine-mens-morris/game/Game');
-const playerFactory    = require('../nine-mens-morris/game/Player');
-const moveFactory      = require('../nine-mens-morris/game/Move');
-const randomBotFactory = require('../nine-mens-morris/ai/bot/RandomBot');
-const enumGameStates   = require('../nine-mens-morris/game/enum/enumGameStates');
+const gameFactory    = require('../nine-mens-morris/game/Game');
+const playerFactory  = require('../nine-mens-morris/game/Player');
+const moveFactory    = require('../nine-mens-morris/game/Move');
+const RandomBot      = require('../nine-mens-morris/ai/bot/RandomBot');
+const enumGameStates = require('../nine-mens-morris/game/enum/enumGameStates');
 
 
 class Api {
@@ -10,7 +10,7 @@ class Api {
     static botGame(playerId) {
 
         const g = gameFactory.createGame();
-        g.addPlayer(randomBotFactory.createRandomBot());
+        g.addPlayer(RandomBot.create());
 
         return {
             id: g.getId(),
@@ -88,7 +88,6 @@ class Api {
     static isFinished(state) {
         return state === enumGameStates.STATE_FINISHED;
     }
-
 
 
 }
